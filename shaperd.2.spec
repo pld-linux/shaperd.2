@@ -1,5 +1,5 @@
-Summary:	Shaperd (CBQ) - bandwidth limiting
-Summary(pl):	Shaperd (CBQ) - dzielenie ³±cza
+Summary:	Shaperd - bandwidth limiting
+Summary(pl):	Shaperd - dzielenie ³±cza
 Name:		shaperd.2
 Version:	2.11
 Release:	1
