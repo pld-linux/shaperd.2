@@ -133,4 +133,5 @@ fi
 
 %files php
 %defattr(644,root,root,755)
+%dir %{_phpdir}
 %attr(644,root,root) %{_phpdir}/shaperd.php
