@@ -29,7 +29,7 @@ case "$1" in
 		# Check if the service is already running?
 		if [ ! -f /var/lock/subsys/shaperd ]; then
 			msg_starting Shaperd 
-			daemon /sbin/shaperd
+			daemon /usr/sbin/shaperd
 			RETVAL=$?
 			[ $RETVAL -eq 0 ] && touch /var/lock/subsys/shaperd
 		else
