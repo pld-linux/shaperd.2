@@ -4,7 +4,7 @@
 #
 # chkconfig:	345 83 17
 #
-# description:	Shaperd is a deamon to control internet incoming LAN 
+# description:	Shaperd is a deamon to control internet incoming LAN \
 #		traffic.
 #
 # Author:	Adam Piatyszek "ediap" <ediap@et.put.poznan.pl>
