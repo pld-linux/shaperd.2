@@ -22,7 +22,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_phpdir		%{_datadir}/%{name}
 %define		_sysconfdir	/etc/%{name}
-%define		_initdir	/etc/rc.d/init.d
+%define		_initrddir	/etc/rc.d/init.d
 %define		_apache1dir	/etc/apache
 %define		_apache2dir	/etc/httpd
 
@@ -63,12 +63,12 @@ Skrypt PHP dla shaperd.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir},%{_initdir},/var/lib/shaper,%{_phpdir},/etc/httpd}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir},%{_initrddir},/var/lib/shaper,%{_phpdir},/etc/httpd}
 
 install shaperd $RPM_BUILD_ROOT%{_sbindir}
 install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}
 install var/www/html/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
-install %{SOURCE1} $RPM_BUILD_ROOT%{_initdir}/shaperd
+install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/apache-%{name}.conf
 
 %clean
@@ -84,17 +84,17 @@ fi
 
 # apache1
 if [ -d %{_apache1dir}/conf.d ]; then
-        ln -sf %{_sysconfdir}/apache-%{name}.conf %{_apache1dir}/conf.d/99_%{name}.conf
-        if [ -f /var/lock/subsys/apache ]; then
-                /etc/rc.d/init.d/apache restart 1>&2
-        fi
+	ln -sf %{_sysconfdir}/apache-%{name}.conf %{_apache1dir}/conf.d/99_%{name}.conf
+	if [ -f /var/lock/subsys/apache ]; then
+		/etc/rc.d/init.d/apache restart 1>&2
+	fi
 fi
 # apache2
 if [ -d %{_apache2dir}/httpd.conf ]; then
-        ln -sf %{_sysconfdir}/apache-%{name}.conf %{_apache2dir}/httpd.conf/99_%{name}.conf
-        if [ -f /var/lock/subsys/httpd ]; then
-                /etc/rc.d/init.d/httpd restart 1>&2
-        fi
+	ln -sf %{_sysconfdir}/apache-%{name}.conf %{_apache2dir}/httpd.conf/99_%{name}.conf
+	if [ -f /var/lock/subsys/httpd ]; then
+		/etc/rc.d/init.d/httpd restart 1>&2
+	fi
 fi
 
 %preun
@@ -105,20 +105,20 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del shaperd
 fi
 if [ "$1" = "0" ]; then
-        # apache1
-        if [ -d %{_apache1dir}/conf.d ]; then
-                rm -f %{_apache1dir}/conf.d/99_%{name}.conf
-                if [ -f /var/lock/subsys/apache ]; then
-                        /etc/rc.d/init.d/apache restart 1>&2
-                fi
-        fi
-        # apache2
-        if [ -d %{_apache2dir}/httpd.conf ]; then
-                rm -f %{_apache2dir}/httpd.conf/99_%{name}.conf
-                if [ -f /var/lock/subsys/httpd ]; then
-                        /etc/rc.d/init.d/httpd restart 1>&2
-                fi
-        fi
+	# apache1
+	if [ -d %{_apache1dir}/conf.d ]; then
+		rm -f %{_apache1dir}/conf.d/99_%{name}.conf
+		if [ -f /var/lock/subsys/apache ]; then
+			/etc/rc.d/init.d/apache restart 1>&2
+		fi
+	fi
+	# apache2
+	if [ -d %{_apache2dir}/httpd.conf ]; then
+		rm -f %{_apache2dir}/httpd.conf/99_%{name}.conf
+		if [ -f /var/lock/subsys/httpd ]; then
+			/etc/rc.d/init.d/httpd restart 1>&2
+		fi
+	fi
 fi
 
 %files
@@ -128,7 +128,7 @@ fi
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
 %attr(755,root,root) %{_sbindir}/shaperd
-%attr(754,root,root) %{_initdir}/shaperd
+%attr(754,root,root) %{_initrddir}/shaperd
 %dir /var/lib/shaper
 
 %files php
