@@ -68,7 +68,7 @@ install shaperd $RPM_BUILD_ROOT%{_sbindir}
 install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}
 install var/www/html/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
 install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
-install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache-%{name}.conf
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/apache-%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
