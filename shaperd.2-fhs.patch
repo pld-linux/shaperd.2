@@ -1,0 +1,118 @@
+--- shaperd.2/usr/src/shaperd/shaperd_old.c.orig	Fri Jul 11 10:36:34 2003
++++ shaperd.2/usr/src/shaperd/shaperd_old.c	Tue Aug  5 11:16:07 2003
+@@ -24,6 +24,8 @@
+ #define IP_CONNTRACK 	"/proc/net/ip_conntrack"
+ #define DEVFILE		"/proc/net/dev"
+ 
++#define	VARDIR		"/var/lib/shaper"
++
+ int			exit_signal = 0;
+ int			reload_signal = 0;
+ jmp_buf   		env_buf;
+@@ -400,8 +402,8 @@
+     sprintf(pidfile,"/var/run/shaperd.%d.pid",shaperd_counter);
+     sprintf(ignorefile,"/etc/shaper/ignore.%d",shaperd_counter);
+     sprintf(iplistfile,"/etc/shaper/iplist.%d",shaperd_counter);
+-    sprintf(oldfile,"/var/shaper/bitrate_user_sh.%d.old",shaperd_counter);
+-    sprintf(oldfile_upload,"/var/shaper/bitrate_user_up.%d.old",shaperd_counter);
++    sprintf(oldfile,VARDIR "/bitrate_user_sh.%d.old",shaperd_counter);
++    sprintf(oldfile_upload,VARDIR "/bitrate_user_up.%d.old",shaperd_counter);
+ 
+     // czytamy liste interfejsow w systemie
+     if (debug>2) printf("debug 3: reading list of system interfaces\n");
+@@ -840,8 +842,8 @@
+ 
+     if (! olddelay)
+     {
+-	if (debug) printf("Creating bandwidth allocation files in /var/shaper/ directory disabled\n");
+-	syslog(LOG_INFO, "Creating bandwidth allocation files in /var/shaper/ directory disabled\n");
++	if (debug) printf("Creating bandwidth allocation files in " VARDIR "/ directory disabled\n");
++	syslog(LOG_INFO, "Creating bandwidth allocation files in " VARDIR "/ directory disabled\n");
+     }
+ 
+     if (!quick_start)
+@@ -2263,11 +2265,11 @@
+ */
+ 		}
+ 	    }
+-	    if (debug>2) printf("debug 3: writing /var/shaper/bitrate_user_sh.%d.old file\n",shaperd_counter);
++	    if (debug>2) printf("debug 3: writing " VARDIR "/bitrate_user_sh.%d.old file\n",shaperd_counter);
+ 	    write_bitrate_user_last(bitrate_user_last,oldfile,int_cnt);
+ 	    if (divide_upload)
+ 	    {
+-		if (debug>2) printf("debug 3: writing /var/shaper/bitrate_user_up.%d.old file\n",shaperd_counter);
++		if (debug>2) printf("debug 3: writing " VARDIR "/bitrate_user_up.%d.old file\n",shaperd_counter);
+ 		write_bitrate_user_last_upload(bitrate_user_last_upload,oldfile_upload,int_cnt);
+ 	    }
+ 	    old = 0;
+--- shaperd.2/usr/share/doc/shaper/shaperd_cbq.html.orig	Fri Jul 11 13:09:42 2003
++++ shaperd.2/usr/share/doc/shaper/shaperd_cbq.html	Tue Aug  5 11:16:39 2003
+@@ -101,7 +101,7 @@
+ 	na pozostalych userow. Cecha przydatna raczej w sieciach komercyjnych.</li>
+ <li><b>05.04.2003</b> - Doda³em kilka wpisów do sekcji <a href="#faq">FAQ</a>.</li>
+ <li><b>05.04.2003</b> - Wersja 2.00beta59.<ul>
+-	<li>Je¶li <b>write_delay=0</b> - shaperd nie bêdzie zapisywa³ przydzia³ów na dysku (w katalogu <b>/var/shaper/</b>)</li>
++	<li>Je¶li <b>write_delay=0</b> - shaperd nie bêdzie zapisywa³ przydzia³ów na dysku (w katalogu <b>/var/lib/shaper/</b>)</li>
+ 	<li>Shaperd nie wywala ju¿ ¿adnych informacji do logu gdy uruchamiany jest z parametrami: <b>shownat</b> lub <b>shownat_all</b></li>
+ 	</ul>
+ </li>
+@@ -650,7 +650,7 @@
+ </pre>
+ </li></ul>
+ 
+-<li>Daemon musi dzia³aæ na prawach <b>root</b> i mieæ mo¿liwo¶æ zapisu do katalogu <b>/var/shaper</b>. Katalog taki trzeba za³o¿yæ z w³a¶cicielem <b>root</b> i prawami <b>755</b><br><br></li>
++<li>Daemon musi dzia³aæ na prawach <b>root</b> i mieæ mo¿liwo¶æ zapisu do katalogu <b>/var/lib/shaper</b>. Katalog taki trzeba za³o¿yæ z w³a¶cicielem <b>root</b> i prawami <b>755</b><br><br></li>
+ <li>W <b>/etc/shaper/ignore.X</b> sa wpisane wyj±tki dla których <b>shaper</b> nie rezerwuje ³±cza.
+ Mog± to byæ przyk³adowo:<br>
+ 217.96.55.5 411 - numer ip i port 411<br>
+@@ -660,7 +660,7 @@
+ Aktualn± listê branych pod uwagê przy podziale numerów ip i portów na maskaradzie (czyli po wyeliminowaniu po³±czeñ z pliku <b>/etc/shaper/ignore.X</b>) mo¿na podgl±dn±æ pisz±c:
+ <pre>/sbin/shaperd shownat</pre>
+ W dostarczonym przyk³adowym pliku s± zrobione wpisy dla popularnych komunikatorów np. GaduGady, Tlen oraz dla kilku czatów i MUD'ów.</li><br><br>
+-<li>W katalogu <b>/var/shaper</b> generowane s± pliki:<ul>
++<li>W katalogu <b>/var/lib/shaper</b> generowane s± pliki:<ul>
+ <li><b>bitrate_user_sh.X.old</b> - zawiera numery ip oraz przydzielone wide³ki dla download.</li>
+ <li><b>bitrate_user_up.X.old</b> - zawiera numery ip oraz przydzielone wide³ki dla upload.</li>
+ Mo¿na to wykorzystaæ do wizualizacji na stronie www - <a href="http://www.trzepak.net/kto.php">przyk³ad u¿ycia</a>. Zawarto¶æ tych plików mo¿e wygl±daæ mniej-wiêcej tak:
+--- shaperd.2/usr/share/doc/shaper/shaperd_cbq_en.html.orig	Fri Jul 11 13:07:04 2003
++++ shaperd.2/usr/share/doc/shaper/shaperd_cbq_en.html	Tue Aug  5 11:16:55 2003
+@@ -79,7 +79,7 @@
+ highest CIR (lospeed - minimum guaraneed speed) to lowest CIR. This change I made esspecially for commercial networks.</li>
+ 
+ <li><b>05.04.2003</b> - Version 2.00beta59.<ul>
+-	<li>If <b>write_delay=0</b> - shaperd will not write bandwidth allocations on disk (in <b>/var/shaper/</b> directory)</li>
++	<li>If <b>write_delay=0</b> - shaperd will not write bandwidth allocations on disk (in <b>/var/lib/shaper/</b> directory)</li>
+ 	<li>Shaperd will not write any messages to log when started with <b>shownat</b> or <b>shownat_all</b></li>
+ 	</ul>
+ </li>
+@@ -530,7 +530,7 @@
+ modprobe sch_sfq
+ modprobe cls_u32
+ </li></ul><br>
+-<li>Daemon has to act <b>root</b> on rights and to have possibility of record to directory <b>/var/shaper</b>. It has owner of this directory to be <b>root</b>. Attributes of this directory are <b>755</b><br></li><br>
++<li>Daemon has to act <b>root</b> on rights and to have possibility of record to directory <b>/var/lib/shaper</b>. It has owner of this directory to be <b>root</b>. Attributes of this directory are <b>755</b><br></li><br>
+ <li>In file <b>/etc/shaper</b> are written except for which <b>shaperd</b> does not assign bandwidth. Example:<br>
+ 217.96.55.5 411 - IP number and port 411<br>
+ 213.180.130.190 - IP number nad all ports<br>
+@@ -539,7 +539,7 @@
+ You should know that every IP number must end with space character.<br>
+ Current list taken under attention at division of numbers ip it were been possible to see writing:
+ <pre>/sbin/shaperd shownat</pre></li>
+-<li>In directory /var/shaper is gernerated bitrate_user_sh.X.old file - it contains IP numbers as well as assigned bandwidths. It was been possible to use it to visualization on WWW page - <a href="http://www.trzepak.net/kto.php">example of use</a>. Content of this file can look so:
++<li>In directory /var/lib/shaper is gernerated bitrate_user_sh.X.old file - it contains IP numbers as well as assigned bandwidths. It was been possible to use it to visualization on WWW page - <a href="http://www.trzepak.net/kto.php">example of use</a>. Content of this file can look so:
+ <pre>
+ 192.168.1.2 40000
+ 192.168.1.9 58000
+--- shaperd.2/var/www/html/kto.php.orig	Wed Jul  2 16:06:46 2003
++++ shaperd.2/var/www/html/kto.php	Tue Aug  5 11:17:52 2003
+@@ -210,8 +210,8 @@
+ 	}
+     }
+ 
+-    $shaper_filename='/var/shaper/bitrate_user_sh.'.$shaperd_counter.'.old';
+-    $shaout_filename='/var/shaper/bitrate_user_up.'.$shaperd_counter.'.old';
++    $shaper_filename='/var/lib/shaper/bitrate_user_sh.'.$shaperd_counter.'.old';
++    $shaout_filename='/var/lib/shaper/bitrate_user_up.'.$shaperd_counter.'.old';
+     if (! $alttlen) $tlen="<a href=\"http://www.tlen.pl/pobierz.html\">Tlen</a>";
+ 
+ // Inicjalizacja generatora liczb losowych
