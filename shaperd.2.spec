@@ -41,7 +41,7 @@ cd usr/src/shaperd
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/{cron.hourly,shaper},%{_initrddir},/var/lib/shaper}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/shaper,%{_initrddir},/var/lib/shaper}
 
 install usr/src/shaperd/shaperd $RPM_BUILD_ROOT%{_sbindir}
 install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}/shaper
