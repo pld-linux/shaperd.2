@@ -10,6 +10,7 @@ Group:		Networking/Admin
 Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
 # Source0-md5:	2a132b13f9127b66ed0c7e7dca197794
 Source1:        %{name}.init
+Patch0:		%{name}-fhs.patch
 #URL:		http://sp9wun.republika.pl/linux/shaperd_cbq.html
 URL:		http://www.cbq.trzepak.net/linux/shaperd_cbq.html
 PreReq:		rc-scripts
@@ -27,19 +28,23 @@ dzieliæ dostêpne pasmo pomiêdzy komputery w sieci lokalnej.
 
 %prep
 %setup -q -n %{name}
+%patch -p1
 
 %build
 cd usr/src/shaperd
-make clean
-make
-cd ../../..
+%{__make} clean
+# this file has its own rule in Makefile, without CFLAGS...
+%{__cc} %{rpmcflags} -c shaperd_old.c
+%{__make} \
+	CC=%{__cc} \
+	CFLAGS="%{rpmcflags} -Wall"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/{cron.hourly,shaper},%{_initrddir},/var/shaper}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/{cron.hourly,shaper},%{_initrddir},/var/lib/shaper}
 
-install ./usr/src/shaperd/shaperd $RPM_BUILD_ROOT%{_sbindir}
-install ./etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}/shaper
+install usr/src/shaperd/shaperd $RPM_BUILD_ROOT%{_sbindir}
+install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}/shaper
 install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
 
 %clean
@@ -68,4 +73,4 @@ fi
 %attr(640,root,root) %verify(not size md5 mtime) %config(noreplace) %{_sysconfdir}/shaper/*
 %attr(755,root,root) %{_sbindir}/shaperd
 %attr(754,root,root) %{_initrddir}/shaperd
-%dir /var/shaper
+%dir /var/lib/shaper
