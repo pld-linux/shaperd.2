@@ -1,14 +1,14 @@
 Summary:	Shaperd (CBQ) - bandwidth limiting
 Summary(pl):	Shaperd (CBQ) - dzielenie ³±cza
 Name:		shaperd.2
-Version:	200beta61
+Version:	2.2
 Release:	1
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
 # Changed source to decrease traffic at republika.pl
 Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
-# Source0-md5:	e515c0044d14d0afea8b222c7d4b7c93
+# Source0-md5:	2a132b13f9127b66ed0c7e7dca197794
 Source1:        %{name}.init
 #URL:		http://sp9wun.republika.pl/linux/shaperd_cbq.html
 URL:		http://www.cbq.trzepak.net/linux/shaperd_cbq.html
@@ -29,16 +29,17 @@ dzieliæ dostêpne pasmo pomiêdzy komputery w sieci lokalnej.
 %setup -q -n %{name}
 
 %build
-%{__cc} %{rpmcflags} usr/src/shaperd/shaperd.c -o usr/src/shaperd/shaperd
+cd usr/src/shaperd
+make clean
+make
+cd ../../..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/{cron.hourly,shaper},%{_initrddir},/var/lib/shaper}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/{cron.hourly,shaper},%{_initrddir},/var/shaper}
 
 install ./usr/src/shaperd/shaperd $RPM_BUILD_ROOT%{_sbindir}
 install ./etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}/shaper
-install ./etc/cron.hourly/ckwintalk $RPM_BUILD_ROOT%{_sysconfdir}/cron.hourly
-install ./var/www/kto.php $RPM_BUILD_ROOT/var/lib/shaper
 install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
 
 %clean
@@ -62,11 +63,9 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc changes.txt
+%doc changes.txt var/www/html/kto.php usr/share/doc/shaper/*
 %dir %{_sysconfdir}/shaper
 %attr(640,root,root) %verify(not size md5 mtime) %config(noreplace) %{_sysconfdir}/shaper/*
 %attr(755,root,root) %{_sbindir}/shaperd
 %attr(754,root,root) %{_initrddir}/shaperd
-%attr(750,root,root) %{_sysconfdir}/cron.hourly/ckwintalk
-%dir /var/lib/shaper
-/var/lib/shaper/kto.php
+%dir /var/shaper
