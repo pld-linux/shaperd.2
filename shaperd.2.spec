@@ -21,7 +21,7 @@ Requires:	firewall-userspace-tool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_phpdir		%{_datadir}/%{name}
-%define		_sysconfdir	/etc/%{name}
+%define		_sysconfdir	/etc/shaper
 %define		_initrddir	/etc/rc.d/init.d
 %define		_apache1dir	/etc/apache
 %define		_apache2dir	/etc/httpd
