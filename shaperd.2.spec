@@ -11,6 +11,7 @@ Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
 # Source0-md5:	b9b8de9c3b83668cd50b7b63e0d3ff56
 # Source0-size:	151795
 Source1:	%{name}.init
+Source2:        %{name}.conf
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-iptables_path.patch
 #URL:		http://sp9wun.republika.pl/linux/shaperd_cbq.html
@@ -20,7 +21,8 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	firewall-userspace-tool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_phpdir		/home/services/httpd/html
+%define		_phpdir		%{_datadir}/%{name}
+%define         _sysconfdir     /etc/%{name}
 
 %description
 This program limits bandwidth on the ethernet/ppp interface and
@@ -59,12 +61,14 @@ Skrypt PHP dla Shaperd-a.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/shaper,%{_initrddir},/var/lib/shaper,%{_phpdir}}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir},%{_initrddir},/var/lib/shaper,%{_phpdir},/etc/httpd}
 
 install shaperd $RPM_BUILD_ROOT%{_sbindir}
-install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}/shaper
+install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}
 install var/www/html/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
 install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -77,6 +81,15 @@ else
 	echo "Run \"/etc/rc.d/init.d/shaperd start\" to start shaperd daemon." >&2
 fi
 
+if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
+        echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+elif [ -d /etc/httpd/httpd.conf ]; then
+        ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
+fi
+if [ -f /var/lock/subsys/httpd ]; then
+        /usr/sbin/apachectl restart 1>&2
+fi
+
 %preun
 if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/shaperd ]; then
@@ -85,11 +98,27 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del shaperd
 fi
 
+if [ "$1" = "0" ]; then
+        umask 027
+        if [ -d /etc/httpd/httpd.conf ]; then
+                rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+        else
+                grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
+                        /etc/httpd/httpd.conf.tmp
+                mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+                if [ -f /var/lock/subsys/httpd ]; then
+                        /usr/sbin/apachectl restart 1>&2
+                fi
+        fi
+fi
+
+
 %files
 %defattr(644,root,root,755)
 %doc changes.txt kto-daemon usr/share/docs/shaperd-2.2.11/shaperd_cbq.html
-%dir %{_sysconfdir}/shaper
-%attr(640,root,root) %verify(not size md5 mtime) %config(noreplace) %{_sysconfdir}/shaper/*
+%dir %{_sysconfdir}
+%attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
+%config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
 %attr(755,root,root) %{_sbindir}/shaperd
 %attr(754,root,root) %{_initrddir}/shaperd
 %dir /var/lib/shaper
