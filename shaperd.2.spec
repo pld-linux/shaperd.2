@@ -9,6 +9,7 @@ Group:		Networking/Admin
 # Changed source to decrease traffic at republika.pl
 Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
 # Source0-md5:	b9b8de9c3b83668cd50b7b63e0d3ff56
+# Source0-size:	151795
 Source1:	%{name}.init
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-iptables_path.patch
