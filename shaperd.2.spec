@@ -2,7 +2,7 @@ Summary:	Shaperd (CBQ) - bandwidth limiting
 Summary(pl):	Shaperd (CBQ) - dzielenie ³±cza
 Name:		shaperd.2
 Version:	2.2
-Release:	2
+Release:	1
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
