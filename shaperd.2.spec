@@ -1,14 +1,14 @@
 Summary:	Shaperd (CBQ) - bandwidth limiting
 Summary(pl):	Shaperd (CBQ) - dzielenie ³±cza
 Name:		shaperd.2
-Version:	2.2
-Release:	4
+Version:	2.11
+Release:	1
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
 # Changed source to decrease traffic at republika.pl
 Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
-# Source0-md5:	2a132b13f9127b66ed0c7e7dca197794
+# Source0-md5:	b9b8de9c3b83668cd50b7b63e0d3ff56
 Source1:	%{name}.init
 Patch0:		%{name}-fhs.patch
 #URL:		http://sp9wun.republika.pl/linux/shaperd_cbq.html
@@ -43,11 +43,10 @@ PHP script for Shaperd.
 Skrypt PHP dla Shaperd-a.
 
 %prep
-%setup -q -n %{name}
+%setup -q -n shaperd
 %patch -p1
 
 %build
-cd usr/src/shaperd
 %{__make} clean
 # this file has its own rule in Makefile, without CFLAGS...
 %{__cc} %{rpmcflags} -c shaperd_old.c
@@ -59,7 +58,7 @@ cd usr/src/shaperd
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/shaper,%{_initrddir},/var/lib/shaper,%{_phpdir}}
 
-install usr/src/shaperd/shaperd $RPM_BUILD_ROOT%{_sbindir}
+install shaperd $RPM_BUILD_ROOT%{_sbindir}
 install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}/shaper
 install var/www/html/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
 install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
@@ -85,7 +84,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc changes.txt usr/share/doc/shaper/*
+%doc changes.txt kto-daemon usr/share/docs/shaperd-2.2.11/shaperd_cbq.html
 %dir %{_sysconfdir}/shaper
 %attr(640,root,root) %verify(not size md5 mtime) %config(noreplace) %{_sysconfdir}/shaper/*
 %attr(755,root,root) %{_sbindir}/shaperd
