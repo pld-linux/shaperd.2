@@ -35,7 +35,6 @@ Group:		Networking/Admin
 Requires:	%{name} = %{version}
 Requires:	php
 Requires:	webserver
-BuildArch:	noarch
 
 %description php
 PHP script for Shaperd.
