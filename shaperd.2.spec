@@ -9,12 +9,12 @@ Group:		Networking/Admin
 # Changed source to decrease traffic at republika.pl
 Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
 # Source0-md5:	2a132b13f9127b66ed0c7e7dca197794
-Source1:        %{name}.init
+Source1:	%{name}.init
 Patch0:		%{name}-fhs.patch
 #URL:		http://sp9wun.republika.pl/linux/shaperd_cbq.html
 URL:		http://www.cbq.trzepak.net/linux/shaperd_cbq.html
 PreReq:		rc-scripts
-Requires(post,preun): /sbin/chkconfig
+Requires(post,preun):	/sbin/chkconfig
 Requires:	firewall-userspace-tool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
