@@ -7,29 +7,29 @@ diff -Nur old/firewall.c new/firewall.c
  	        {
 -//	            sprintf(bufor,"/sbin/iptables -A squid%d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
 -	            sprintf(bufor,"/sbin/iptables -I squid%d %d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
-+//	            sprintf(bufor,"iptables -A squid%d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
-+	            sprintf(bufor,"iptables -I squid%d %d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
++//	            sprintf(bufor,"/usr/sbin/iptables -A squid%d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
++	            sprintf(bufor,"/usr/sbin/iptables -I squid%d %d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
  			    shaperd_counter,position-pos_diff+2,config[1][(pos*6)+3],squid_port,ptr -> str_ip);
  		    fputs(bufor,fp);
  		    if (extended_queue)
  		    {
 -		        sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+		        sprintf(bufor,"iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++		        sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  			        config[1][(pos*6)+3],squid_port,ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(position+4)));
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(position+4)));
  			fputs(bufor,fp);
  		    }
  		    else
  		    {
 -		        sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+		        sprintf(bufor,"iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++		        sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(4*(position+4))+(1000*atoi(config[1][(pos*6)+5])));
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(4*(position+4))+(1000*atoi(config[1][(pos*6)+5])));
  			fputs(bufor,fp);
  		    }
@@ -39,16 +39,16 @@ diff -Nur old/firewall.c new/firewall.c
  		{
 -//		    sprintf(bufor,"/sbin/iptables -A shaper%d -o %s -s ! %s -d %s -j RETURN\n",
 -		    sprintf(bufor,"/sbin/iptables -I shaper%d %d -o %s -s ! %s -d %s -j RETURN\n",
-+//		    sprintf(bufor,"iptables -A shaper%d -o %s -s ! %s -d %s -j RETURN\n",
-+		    sprintf(bufor,"iptables -I shaper%d %d -o %s -s ! %s -d %s -j RETURN\n",
++//		    sprintf(bufor,"/usr/sbin/iptables -A shaper%d -o %s -s ! %s -d %s -j RETURN\n",
++		    sprintf(bufor,"/usr/sbin/iptables -I shaper%d %d -o %s -s ! %s -d %s -j RETURN\n",
  			shaperd_counter,position-pos_diff,config[1][(pos*6)+1],config[1][(pos*6)+3],ptr -> str_ip);
  		}
  		else
  		{
 -//		    sprintf(bufor,"/sbin/iptables -A shaper%d -s ! %s -d %s -j RETURN\n",
 -		    sprintf(bufor,"/sbin/iptables -I shaper%d %d -s ! %s -d %s -j RETURN\n",
-+//		    sprintf(bufor,"iptables -A shaper%d -s ! %s -d %s -j RETURN\n",
-+		    sprintf(bufor,"iptables -I shaper%d %d -s ! %s -d %s -j RETURN\n",
++//		    sprintf(bufor,"/usr/sbin/iptables -A shaper%d -s ! %s -d %s -j RETURN\n",
++		    sprintf(bufor,"/usr/sbin/iptables -I shaper%d %d -s ! %s -d %s -j RETURN\n",
  			shaperd_counter,position-pos_diff,config[1][(pos*6)+3],ptr -> str_ip);
  		}
  		fputs(bufor,fp);
@@ -57,20 +57,20 @@ diff -Nur old/firewall.c new/firewall.c
  		    //download
  		    // W zaleznoci od pola TOS i adresu docelowego znakujemy pakiety
 -		    sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -d %s -j MARK --set-mark %d\n",
-+		    sprintf(bufor,"iptables -t mangle -A FORWARD -d %s -j MARK --set-mark %d\n",
++		    sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -d %s -j MARK --set-mark %d\n",
  			    ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+103+(4*(position+4)));
  		    fputs(bufor,fp);
  //		    printf("%s\n",bufor);
 -		    sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
-+		    sprintf(bufor,"iptables -t mangle -A FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
++		    sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
  			    ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+102+(4*(position+4)));
  		    fputs(bufor,fp);
 -		    sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
-+		    sprintf(bufor,"iptables -t mangle -A FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
++		    sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
  			    ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(position+4)));
  		    fputs(bufor,fp);
 -		    sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
-+		    sprintf(bufor,"iptables -t mangle -A FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
++		    sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
  		    	    ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+100+(4*(position+4)));
  		    fputs(bufor,fp);
  		}
@@ -80,8 +80,8 @@ diff -Nur old/firewall.c new/firewall.c
  			{
 -//		    	    sprintf(bufor,"/sbin/iptables -A shaout%d -i %s -s %s -d ! %s -j RETURN\n",
 -		    	    sprintf(bufor,"/sbin/iptables -I shaout%d %d -i %s -s %s -d ! %s -j RETURN\n",
-+//		    	    sprintf(bufor,"iptables -A shaout%d -i %s -s %s -d ! %s -j RETURN\n",
-+		    	    sprintf(bufor,"iptables -I shaout%d %d -i %s -s %s -d ! %s -j RETURN\n",
++//		    	    sprintf(bufor,"/usr/sbin/iptables -A shaout%d -i %s -s %s -d ! %s -j RETURN\n",
++		    	    sprintf(bufor,"/usr/sbin/iptables -I shaout%d %d -i %s -s %s -d ! %s -j RETURN\n",
  			        shaperd_counter,position,config[1][(pos*6)+1],ptr -> str_ip,config[1][(pos*6)+3]);
  			    fputs(bufor,fp);
  			}
@@ -89,8 +89,8 @@ diff -Nur old/firewall.c new/firewall.c
  			{
 -//		    	    sprintf(bufor,"/sbin/iptables -A shaout%d -s %s -d ! %s -j RETURN\n",
 -		    	    sprintf(bufor,"/sbin/iptables -I shaout%d %d -s %s -d ! %s -j RETURN\n",
-+//		    	    sprintf(bufor,"iptables -A shaout%d -s %s -d ! %s -j RETURN\n",
-+		    	    sprintf(bufor,"iptables -I shaout%d %d -s %s -d ! %s -j RETURN\n",
++//		    	    sprintf(bufor,"/usr/sbin/iptables -A shaout%d -s %s -d ! %s -j RETURN\n",
++		    	    sprintf(bufor,"/usr/sbin/iptables -I shaout%d %d -s %s -d ! %s -j RETURN\n",
  			        shaperd_counter,position,ptr -> str_ip,config[1][(pos*6)+3]);
  			    fputs(bufor,fp);
  			}
@@ -98,7 +98,7 @@ diff -Nur old/firewall.c new/firewall.c
  			if (! extended_queue)
  			{
 -			    sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
  			            ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+position+4);
  			    fputs(bufor,fp);
  			}
@@ -106,21 +106,21 @@ diff -Nur old/firewall.c new/firewall.c
  			{
  			    // upload
 -			    sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
  				    ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+103+(4*(position+4)));
  			    fputs(bufor,fp);
  //			    printf("%s\n",bufor);
  
 -			    sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
  			    	    ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+102+(4*(position+4)));
  			    fputs(bufor,fp);
 -			    sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
  				    ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+101+(4*(position+4)));
  			    fputs(bufor,fp);
 -			    sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
  				    ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+100+(4*(position+4)));
  			    fputs(bufor,fp);
  			}
@@ -129,29 +129,29 @@ diff -Nur old/firewall.c new/firewall.c
  	        if (squid)
  	        {
 -	            sprintf(bufor,"/sbin/iptables -D squid%d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
-+	            sprintf(bufor,"iptables -D squid%d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
++	            sprintf(bufor,"/usr/sbin/iptables -D squid%d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
  			    shaperd_counter,config[1][(pos*6)+3],squid_port,ptr -> str_ip);
  		    fputs(bufor,fp);
  		    if (extended_queue)
  		    {
 -		        sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+		        sprintf(bufor,"iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++		        sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  			        config[1][(pos*6)+3],squid_port,ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
  //			printf("%s\n",bufor);
 -			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
  		    }
  		    else
  		    {
 -		        sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+		        sprintf(bufor,"iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++		        sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(4*(get_ip_cnt(ptr -> str_ip)+4))+(1000*atoi(config[1][(pos*6)+5])));
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(4*(get_ip_cnt(ptr -> str_ip)+4))+(1000*atoi(config[1][(pos*6)+5])));
  			fputs(bufor,fp);
  		    }
@@ -160,13 +160,13 @@ diff -Nur old/firewall.c new/firewall.c
  		if (!load_balancing)
  		{
 -		    sprintf(bufor,"/sbin/iptables -D shaper%d -o %s -s ! %s -d %s -j RETURN\n",
-+		    sprintf(bufor,"iptables -D shaper%d -o %s -s ! %s -d %s -j RETURN\n",
++		    sprintf(bufor,"/usr/sbin/iptables -D shaper%d -o %s -s ! %s -d %s -j RETURN\n",
  			shaperd_counter,config[1][(pos*6)+1],config[1][(pos*6)+3],ptr -> str_ip);
  		}
  		else
  		{
 -		    sprintf(bufor,"/sbin/iptables -D shaper%d -s ! %s -d %s -j RETURN\n",
-+		    sprintf(bufor,"iptables -D shaper%d -s ! %s -d %s -j RETURN\n",
++		    sprintf(bufor,"/usr/sbin/iptables -D shaper%d -s ! %s -d %s -j RETURN\n",
  			shaperd_counter,config[1][(pos*6)+3],ptr -> str_ip);
  		}
  		fputs(bufor,fp);
@@ -175,19 +175,19 @@ diff -Nur old/firewall.c new/firewall.c
  		    //download
  		    // W zaleznoci od pola TOS i adresu docelowego znakujemy pakiety
 -		    sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -j MARK --set-mark %d\n",
-+		    sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -j MARK --set-mark %d\n",
++		    sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -j MARK --set-mark %d\n",
  			    ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+103+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  		    fputs(bufor,fp);
 -		    sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
-+		    sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
++		    sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
  			    ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+102+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  		    fputs(bufor,fp);
 -		    sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
-+		    sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
++		    sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
  			    ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  		    fputs(bufor,fp);
 -		    sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
-+		    sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
++		    sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
  		    	    ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+100+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  		    fputs(bufor,fp);
  		}
@@ -196,20 +196,20 @@ diff -Nur old/firewall.c new/firewall.c
  			if (!load_balancing)
  			{
 -		    	    sprintf(bufor,"/sbin/iptables -D shaout%d -i %s -s %s -d ! %s -j RETURN\n",
-+		    	    sprintf(bufor,"iptables -D shaout%d -i %s -s %s -d ! %s -j RETURN\n",
++		    	    sprintf(bufor,"/usr/sbin/iptables -D shaout%d -i %s -s %s -d ! %s -j RETURN\n",
  			        shaperd_counter,config[1][(pos*6)+1],ptr -> str_ip,config[1][(pos*6)+3]);
  			}
  			else
  			{
 -		    	    sprintf(bufor,"/sbin/iptables -D shaout%d -s %s -d ! %s -j RETURN\n",
-+		    	    sprintf(bufor,"iptables -D shaout%d -s %s -d ! %s -j RETURN\n",
++		    	    sprintf(bufor,"/usr/sbin/iptables -D shaout%d -s %s -d ! %s -j RETURN\n",
  			        shaperd_counter,ptr -> str_ip,config[1][(pos*6)+3]);
  			}
  			fputs(bufor,fp);
  			if (! extended_queue)
  			{
 -			    sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
  			            ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+get_ip_cnt(ptr -> str_ip)+4);
  			    fputs(bufor,fp);
  			}
@@ -217,20 +217,20 @@ diff -Nur old/firewall.c new/firewall.c
  			{
  			    // upload
 -			    sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
  				    ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+103+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			    fputs(bufor,fp);
  
 -			    sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
  			    	    ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+102+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			    fputs(bufor,fp);
 -			    sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
  				    ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			    fputs(bufor,fp);
 -			    sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
  				    ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+100+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			    fputs(bufor,fp);
  			}
@@ -242,7 +242,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
      if (firewall_type==2)
      {
 -	sprintf(pop,"/sbin/iptables -vxL shaper%d -n 2>> %s\n",shaperd_counter,output);
-+	sprintf(pop,"iptables -vxL shaper%d -n 2>> %s\n",shaperd_counter,output);
++	sprintf(pop,"/usr/sbin/iptables -vxL shaper%d -n 2>> %s\n",shaperd_counter,output);
  	if (!(fp = popen(pop,"r")))
  	{
  	    syslog(LOG_ERR,"Can't read shaper%d table from iptables",shaperd_counter);
@@ -251,7 +251,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
      if (firewall_type==2)
      {
 -	sprintf(pop,"/sbin/iptables -vxL shaout%d -n 2>> %s\n",shaperd_counter,output);
-+	sprintf(pop,"iptables -vxL shaout%d -n 2>> %s\n",shaperd_counter,output);
++	sprintf(pop,"/usr/sbin/iptables -vxL shaout%d -n 2>> %s\n",shaperd_counter,output);
  	if (!(fp = popen(pop,"r")))
  	{
  	    syslog(LOG_ERR,"Can't read shaout%d table from iptables",shaperd_counter);
@@ -260,21 +260,21 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  	    
  	    // download
 -	    sprintf(pop1,"/sbin/iptables -N shaper%d\n",shaperd_counter);
-+	    sprintf(pop1,"iptables -N shaper%d\n",shaperd_counter);
++	    sprintf(pop1,"/usr/sbin/iptables -N shaper%d\n",shaperd_counter);
  	    fputs(pop1,fp);
  
  	    if (squid)
  	    {
  		// squid
 -		sprintf(pop1,"/sbin/iptables -N squid%d\n",shaperd_counter);
-+		sprintf(pop1,"iptables -N squid%d\n",shaperd_counter);
++		sprintf(pop1,"/usr/sbin/iptables -N squid%d\n",shaperd_counter);
  		fputs(pop1,fp);
  	    }
  	    if (divide_upload)
  	    {
  	    // upload
 -	    sprintf(pop1,"/sbin/iptables -N shaout%d\n",shaperd_counter);
-+	    sprintf(pop1,"iptables -N shaout%d\n",shaperd_counter);
++	    sprintf(pop1,"/usr/sbin/iptables -N shaout%d\n",shaperd_counter);
  	    fputs(pop1,fp);
  	    }
  
@@ -282,7 +282,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
      	    if (squid)
  	    {
 -		sprintf(bufor,"/sbin/iptables -I OUTPUT -j squid%d\n",shaperd_counter);
-+		sprintf(bufor,"iptables -I OUTPUT -j squid%d\n",shaperd_counter);
++		sprintf(bufor,"/usr/sbin/iptables -I OUTPUT -j squid%d\n",shaperd_counter);
  		fputs(bufor,fp);
  	    }
  /*
@@ -291,7 +291,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  	    	    if (squid)
  		    {
 -			sprintf(bufor,"/sbin/iptables -A OUTPUT -o %s -j squid%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
-+			sprintf(bufor,"iptables -A OUTPUT -o %s -j squid%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -A OUTPUT -o %s -j squid%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
  			fputs(bufor,fp);
  		    }
  		}
@@ -300,12 +300,12 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		    if (!load_balancing)
  		    {
 -			sprintf(bufor,"/sbin/iptables -I FORWARD -i %s -j shaper%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
-+			sprintf(bufor,"iptables -I FORWARD -i %s -j shaper%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -I FORWARD -i %s -j shaper%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
  		    }
  		    else
  		    {
 -			sprintf(bufor,"/sbin/iptables -I FORWARD -j shaper%d\n",shaperd_counter);
-+			sprintf(bufor,"iptables -I FORWARD -j shaper%d\n",shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -I FORWARD -j shaper%d\n",shaperd_counter);
  		    }
  		    fputs(bufor,fp);
  		    if (divide_upload)
@@ -314,32 +314,32 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		    if (!load_balancing)
  		    {
 -			sprintf(bufor,"/sbin/iptables -I FORWARD -o %s -j shaout%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
-+			sprintf(bufor,"iptables -I FORWARD -o %s -j shaout%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -I FORWARD -o %s -j shaout%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -I OUTPUT -o %s -j shaout%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
-+			sprintf(bufor,"iptables -I OUTPUT -o %s -j shaout%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -I OUTPUT -o %s -j shaout%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
  			fputs(bufor,fp);
  		    }
  		    else
  		    {
 -			sprintf(bufor,"/sbin/iptables -I FORWARD -j shaout%d\n",shaperd_counter);
-+			sprintf(bufor,"iptables -I FORWARD -j shaout%d\n",shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -I FORWARD -j shaout%d\n",shaperd_counter);
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -I OUTPUT -j shaout%d\n",shaperd_counter);
-+			sprintf(bufor,"iptables -I OUTPUT -j shaout%d\n",shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -I OUTPUT -j shaout%d\n",shaperd_counter);
  			fputs(bufor,fp);
  		    }
  
  //		    if (!load_balancing)
  //		    {
 -			sprintf(bufor,"/sbin/iptables -A shaout%d -o %s -s %s -j RETURN\n",
-+			sprintf(bufor,"iptables -A shaout%d -o %s -s %s -j RETURN\n",
++			sprintf(bufor,"/usr/sbin/iptables -A shaout%d -o %s -s %s -j RETURN\n",
  			    shaperd_counter,config[1][(int_cnt*6)+1],config[1][(int_cnt*6)+2]);
  //		    }
  //		    else
  //		    {
 -//			sprintf(bufor,"/sbin/iptables -A shaout%d -s %s -j RETURN\n",
-+//			sprintf(bufor,"iptables -A shaout%d -s %s -j RETURN\n",
++//			sprintf(bufor,"/usr/sbin/iptables -A shaout%d -s %s -j RETURN\n",
  //			    shaperd_counter,config[1][(int_cnt*6)+2]);
  //		    }
  		    fputs(bufor,fp);
@@ -347,7 +347,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		    if (extended_queue)
  		    {
 -		    sprintf(bufor,"/sbin/iptables -t mangle -A POSTROUTING -s %s -j MARK --set-mark %d\n",
-+		    sprintf(bufor,"iptables -t mangle -A POSTROUTING -s %s -j MARK --set-mark %d\n",
++		    sprintf(bufor,"/usr/sbin/iptables -t mangle -A POSTROUTING -s %s -j MARK --set-mark %d\n",
  			    config[1][(int_cnt*6)+2],(1000*atoi(config[1][(int_cnt*6)+3]))+103+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  		    fputs(bufor,fp);
  
@@ -356,14 +356,14 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  					if (!strcmp(prot,"icmp") && !strcmp("icmp",prot))
  					{
 -					    sprintf(bufor,"/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d\n",
-+					    sprintf(bufor,"iptables -t mangle -A POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d\n",
++					    sprintf(bufor,"/usr/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d\n",
  						    prot,config[1][(int_cnt*6)+2],dst,(1000*atoi(config[1][(int_cnt*6)+3]))+102+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  					    fputs(bufor,fp);
  					}
  					else
  					{
 -					    sprintf(bufor,"/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d\n",
-+					    sprintf(bufor,"iptables -t mangle -A POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d\n",
++					    sprintf(bufor,"/usr/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d\n",
  						    prot,config[1][(int_cnt*6)+2],sport,dst,dport,(1000*atoi(config[1][(int_cnt*6)+3]))+102+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  					    fputs(bufor,fp);
  					}
@@ -372,14 +372,14 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  					if (!strcmp(prot,"icmp") && !strcmp("icmp",prot))
  					{
 -					    sprintf(bufor,"/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d\n",
-+					    sprintf(bufor,"iptables -t mangle -A POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d\n",
++					    sprintf(bufor,"/usr/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d\n",
  						    prot,config[1][(int_cnt*6)+2],dst,(1000*atoi(config[1][(int_cnt*6)+3]))+101+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  					    fputs(bufor,fp);
  					}
  					else
  					{
 -					    sprintf(bufor,"/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d\n",
-+					    sprintf(bufor,"iptables -t mangle -A POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d\n",
++					    sprintf(bufor,"/usr/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d\n",
  						    prot,config[1][(int_cnt*6)+2],sport,dst,dport,(1000*atoi(config[1][(int_cnt*6)+3]))+101+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  					    fputs(bufor,fp);
  					}
@@ -388,14 +388,14 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  					if (!strcmp(prot,"icmp") && !strcmp("icmp",prot))
  					{
 -					    sprintf(bufor,"/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d\n",
-+					    sprintf(bufor,"iptables -t mangle -A POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d\n",
++					    sprintf(bufor,"/usr/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d\n",
  						    prot,config[1][(int_cnt*6)+2],dst,(1000*atoi(config[1][(int_cnt*6)+3]))+100+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  					    fputs(bufor,fp);
  					}
  					else
  					{
 -					    sprintf(bufor,"/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d\n",
-+					    sprintf(bufor,"iptables -t mangle -A POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d\n",
++					    sprintf(bufor,"/usr/sbin/iptables -t mangle -A POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d\n",
  						    prot,config[1][(int_cnt*6)+2],sport,dst,dport,(1000*atoi(config[1][(int_cnt*6)+3]))+100+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  					    fputs(bufor,fp);
  					}
@@ -404,7 +404,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		    else
  		    {
 -			sprintf(bufor,"/sbin/iptables -t mangle -A POSTROUTING -s %s -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -t mangle -A POSTROUTING -s %s -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -A POSTROUTING -s %s -j MARK --set-mark %d\n",
  			        config[1][(int_cnt*6)+2],(1000*atoi(config[1][(int_cnt*6)+3]))+get_ip_cnt(config[1][(int_cnt*6)+2])+4);
  			fputs(bufor,fp);
  		    }
@@ -413,43 +413,43 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		    if (!local_int_tab2[1][(pos*6)+5])
  		    {
 -//    			sprintf(bufor,"/sbin/iptables -A squid%d -p tcp --src %s --sport %d -m tos --tos 0 -j RETURN\n",
-+//    			sprintf(bufor,"iptables -A squid%d -p tcp --src %s --sport %d -m tos --tos 0 -j RETURN\n",
++//    			sprintf(bufor,"/usr/sbin/iptables -A squid%d -p tcp --src %s --sport %d -m tos --tos 0 -j RETURN\n",
  //			    shaperd_counter,config[1][(pos*6)+3],squid_port);
 -    			sprintf(bufor,"/sbin/iptables -A squid%d -p tcp --src %s --sport %d --dst %s -m tos --tos 0 -j RETURN\n",
-+    			sprintf(bufor,"iptables -A squid%d -p tcp --src %s --sport %d --dst %s -m tos --tos 0 -j RETURN\n",
++    			sprintf(bufor,"/usr/sbin/iptables -A squid%d -p tcp --src %s --sport %d --dst %s -m tos --tos 0 -j RETURN\n",
  			    shaperd_counter,config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4]);
  			fputs(bufor,fp);
 -    			sprintf(bufor,"/sbin/iptables -A squid%d -p udp --src %s --sport %d --dst %s -m tos --tos 0 -j RETURN\n",
-+    			sprintf(bufor,"iptables -A squid%d -p udp --src %s --sport %d --dst %s -m tos --tos 0 -j RETURN\n",
++    			sprintf(bufor,"/usr/sbin/iptables -A squid%d -p udp --src %s --sport %d --dst %s -m tos --tos 0 -j RETURN\n",
  			    shaperd_counter,config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4]);
  			fputs(bufor,fp);
 -//			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
-+//			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
++//			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
  //			    config[1][(pos*6)+3],squid_port,atoi(config[1][(pos*6)+5])*1000);
 -			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d\n",
  			    config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4],atoi(config[1][(pos*6)+5])*1000);
  			fputs(bufor,fp);
 -//			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
-+//			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
++//			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
  //			    config[1][(pos*6)+3],squid_port,atoi(config[1][(pos*6)+5])*1000);
 -			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d\n",
  			    config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4],atoi(config[1][(pos*6)+5])*1000);
  			fputs(bufor,fp);
  			// pelna szybkosc przy transferze lokalnym z serwera do userow
 -//			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport ! %d -j MARK --set-mark %d\n",
-+//			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p tcp --src %s --sport ! %d -j MARK --set-mark %d\n",
++//			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport ! %d -j MARK --set-mark %d\n",
  //			    config[1][(pos*6)+3],squid_port,atoi(config[1][(pos*6)+5])*1000);
 -			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport ! %d --dst %s -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p tcp --src %s --sport ! %d --dst %s -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport ! %d --dst %s -j MARK --set-mark %d\n",
  			    config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4],atoi(config[1][(pos*6)+5])*1000);
  			fputs(bufor,fp);
 -//			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport ! %d -j MARK --set-mark %d\n",
-+//			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p udp --src %s --sport ! %d -j MARK --set-mark %d\n",
++//			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport ! %d -j MARK --set-mark %d\n",
  //			    config[1][(pos*6)+3],squid_port,atoi(config[1][(pos*6)+5])*1000);
 -			sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport ! %d --dst %s -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -A POSTROUTING -t mangle -p udp --src %s --sport ! %d --dst %s -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport ! %d --dst %s -j MARK --set-mark %d\n",
  			    config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4],atoi(config[1][(pos*6)+5])*1000);
  			fputs(bufor,fp);
  		    }
@@ -458,28 +458,28 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		    if (squid)
  		    {
 -		        sprintf(bufor,"/sbin/iptables -A squid%d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
-+		        sprintf(bufor,"iptables -A squid%d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
++		        sprintf(bufor,"/usr/sbin/iptables -A squid%d -p tcp --src %s --sport %d -m tos --tos 8 --dst %s -j RETURN\n",
  			        shaperd_counter,config[1][(pos*6)+3],squid_port,ptr -> str_ip);
  			fputs(bufor,fp);
  			if (extended_queue)
  			{
 -			    sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  			        config[1][(pos*6)+3],squid_port,ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			    fputs(bufor,fp);
 -			    sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			    fputs(bufor,fp);
  			}
  			else
  			{
 -			    sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(4*(get_ip_cnt(ptr -> str_ip)+4))+(1000*atoi(config[1][(pos*6)+5])));
  			    fputs(bufor,fp);
 -			    sprintf(bufor,"/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -A POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(4*(get_ip_cnt(ptr -> str_ip)+4))+(1000*atoi(config[1][(pos*6)+5])));
  			    fputs(bufor,fp);
  			}
@@ -488,13 +488,13 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  //		    if (!load_balancing)
  //		    {
 -			sprintf(bufor,"/sbin/iptables -A shaper%d -o %s -s ! %s -d %s -j RETURN\n",
-+			sprintf(bufor,"iptables -A shaper%d -o %s -s ! %s -d %s -j RETURN\n",
++			sprintf(bufor,"/usr/sbin/iptables -A shaper%d -o %s -s ! %s -d %s -j RETURN\n",
  		    	    shaperd_counter,config[1][(pos*6)+1],config[1][(pos*6)+3],ptr -> str_ip);
  //		    }
  //		    else
  //		    {
 -//			sprintf(bufor,"/sbin/iptables -A shaper%d -s ! %s -d %s -j RETURN\n",
-+//			sprintf(bufor,"iptables -A shaper%d -s ! %s -d %s -j RETURN\n",
++//			sprintf(bufor,"/usr/sbin/iptables -A shaper%d -s ! %s -d %s -j RETURN\n",
  //		    	    shaperd_counter,config[1][(pos*6)+3],ptr -> str_ip);
  //		    }
  		    fputs(bufor,fp);
@@ -503,19 +503,19 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		        //download
  			// W zaleznoci od pola TOS i adresu docelowego znakujemy pakiety
 -			sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -d %s -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -t mangle -A FORWARD -d %s -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -d %s -j MARK --set-mark %d\n",
  				ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+103+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -t mangle -A FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
  				ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+102+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -t mangle -A FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
  				ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
-+			sprintf(bufor,"iptables -t mangle -A FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
  				ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+100+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
  		    }
@@ -524,20 +524,20 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  //			    if (!load_balancing)
  //			    {
 -				sprintf(bufor,"/sbin/iptables -A shaout%d -i %s -s %s -d ! %s -j RETURN\n",
-+				sprintf(bufor,"iptables -A shaout%d -i %s -s %s -d ! %s -j RETURN\n",
++				sprintf(bufor,"/usr/sbin/iptables -A shaout%d -i %s -s %s -d ! %s -j RETURN\n",
  				    shaperd_counter,config[1][(pos*6)+1],ptr -> str_ip,config[1][(pos*6)+3]);
  //			    }
  //			    else
  //			    {
 -//				sprintf(bufor,"/sbin/iptables -A shaout%d -s %s -d ! %s -j RETURN\n",
-+//				sprintf(bufor,"iptables -A shaout%d -s %s -d ! %s -j RETURN\n",
++//				sprintf(bufor,"/usr/sbin/iptables -A shaout%d -s %s -d ! %s -j RETURN\n",
  //				    shaperd_counter,ptr -> str_ip,config[1][(pos*6)+3]);
  //			    }
  			    fputs(bufor,fp);
  			    if (! extended_queue)
  			    {
 -				sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
-+				sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
++				sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
  				        ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+get_ip_cnt(ptr -> str_ip)+4);
  				fputs(bufor,fp);
  			    }
@@ -545,20 +545,20 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  			    {
  				// upload
 -			        sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
-+			        sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
++			        sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -j MARK --set-mark %d\n",
  					ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+103+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  				fputs(bufor,fp);
  
 -				sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
-+				sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
++				sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d\n",
  					ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+102+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  				fputs(bufor,fp);
 -				sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
-+				sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
++				sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d\n",
  					ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  				fputs(bufor,fp);
 -				sprintf(bufor,"/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
-+				sprintf(bufor,"iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
++				sprintf(bufor,"/usr/sbin/iptables -t mangle -A FORWARD -s %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d\n",
  					ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+100+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  				fputs(bufor,fp);
  			    }
@@ -567,19 +567,19 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  
  	    // download
 -	    sprintf(pop,"/sbin/iptables -F shaper%d 2> /dev/null\n",shaperd_counter);
-+	    sprintf(pop,"iptables -F shaper%d 2> /dev/null\n",shaperd_counter);
++	    sprintf(pop,"/usr/sbin/iptables -F shaper%d 2> /dev/null\n",shaperd_counter);
  	    fputs(pop,fp);
  	    if (divide_upload)
  	    {
  	    // upload
 -	    sprintf(pop,"/sbin/iptables -F shaout%d 2> /dev/null\n",shaperd_counter);
-+	    sprintf(pop,"iptables -F shaout%d 2> /dev/null\n",shaperd_counter);
++	    sprintf(pop,"/usr/sbin/iptables -F shaout%d 2> /dev/null\n",shaperd_counter);
  	    fputs(pop,fp);
  	    }
  	    if (squid)
  	    {
 -	    sprintf(pop,"/sbin/iptables -F squid%d 2> /dev/null\n",shaperd_counter);
-+	    sprintf(pop,"iptables -F squid%d 2> /dev/null\n",shaperd_counter);
++	    sprintf(pop,"/usr/sbin/iptables -F squid%d 2> /dev/null\n",shaperd_counter);
  	    fputs(pop,fp);
  	    }
  	    
@@ -588,12 +588,12 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		    if (!load_balancing)
  		    {
 -			sprintf(bufor,"/sbin/iptables -D FORWARD -i %s -j shaper%d 2> /dev/null\n",config[1][(int_cnt*6)+1],shaperd_counter);
-+			sprintf(bufor,"iptables -D FORWARD -i %s -j shaper%d 2> /dev/null\n",config[1][(int_cnt*6)+1],shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -D FORWARD -i %s -j shaper%d 2> /dev/null\n",config[1][(int_cnt*6)+1],shaperd_counter);
  		    }
  		    else
  		    {
 -			sprintf(bufor,"/sbin/iptables -D FORWARD -j shaper%d 2> /dev/null\n",shaperd_counter);
-+			sprintf(bufor,"iptables -D FORWARD -j shaper%d 2> /dev/null\n",shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -D FORWARD -j shaper%d 2> /dev/null\n",shaperd_counter);
  		    }
  		    fputs(bufor,fp);
  		    if (divide_upload)
@@ -601,26 +601,26 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		    if (!load_balancing)
  		    {
 -		    sprintf(bufor,"/sbin/iptables -D FORWARD -o %s -j shaout%d 2> /dev/null\n",config[1][(int_cnt*6)+1],shaperd_counter);
-+		    sprintf(bufor,"iptables -D FORWARD -o %s -j shaout%d 2> /dev/null\n",config[1][(int_cnt*6)+1],shaperd_counter);
++		    sprintf(bufor,"/usr/sbin/iptables -D FORWARD -o %s -j shaout%d 2> /dev/null\n",config[1][(int_cnt*6)+1],shaperd_counter);
  		    fputs(bufor,fp);
 -		    sprintf(bufor,"/sbin/iptables -D OUTPUT -o %s -j shaout%d 2> /dev/null\n",config[1][(int_cnt*6)+1],shaperd_counter);
-+		    sprintf(bufor,"iptables -D OUTPUT -o %s -j shaout%d 2> /dev/null\n",config[1][(int_cnt*6)+1],shaperd_counter);
++		    sprintf(bufor,"/usr/sbin/iptables -D OUTPUT -o %s -j shaout%d 2> /dev/null\n",config[1][(int_cnt*6)+1],shaperd_counter);
  		    fputs(bufor,fp);
  		    }
  		    else
  		    {
 -		    sprintf(bufor,"/sbin/iptables -D FORWARD -j shaout%d 2> /dev/null\n",shaperd_counter);
-+		    sprintf(bufor,"iptables -D FORWARD -j shaout%d 2> /dev/null\n",shaperd_counter);
++		    sprintf(bufor,"/usr/sbin/iptables -D FORWARD -j shaout%d 2> /dev/null\n",shaperd_counter);
  		    fputs(bufor,fp);
 -		    sprintf(bufor,"/sbin/iptables -D OUTPUT -j shaout%d 2> /dev/null\n",shaperd_counter);
-+		    sprintf(bufor,"iptables -D OUTPUT -j shaout%d 2> /dev/null\n",shaperd_counter);
++		    sprintf(bufor,"/usr/sbin/iptables -D OUTPUT -j shaout%d 2> /dev/null\n",shaperd_counter);
  		    fputs(bufor,fp);
  		    }
  		    
  		    if (extended_queue)
  		    {
 -			sprintf(bufor,"/sbin/iptables -t mangle -D POSTROUTING -s %s -j MARK --set-mark %d 2> /dev/null\n",
-+			sprintf(bufor,"iptables -t mangle -D POSTROUTING -s %s -j MARK --set-mark %d 2> /dev/null\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -D POSTROUTING -s %s -j MARK --set-mark %d 2> /dev/null\n",
  				config[1][(int_cnt*6)+2],(1000*atoi(config[1][(int_cnt*6)+3]))+103+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  			fputs(bufor,fp);
  
@@ -629,14 +629,14 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  					    if (!strcmp(prot,"icmp") && !strcmp("icmp",prot))
  					    {
 -						sprintf(bufor,"/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d 2> /dev/null\n",
-+						sprintf(bufor,"iptables -t mangle -D POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d 2> /dev/null\n",
++						sprintf(bufor,"/usr/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d 2> /dev/null\n",
  							prot,config[1][(int_cnt*6)+2],dst,(1000*atoi(config[1][(int_cnt*6)+3]))+102+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  						fputs(bufor,fp);
  					    }
  					    else
  					    {
 -						sprintf(bufor,"/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d 2> /dev/null\n",
-+						sprintf(bufor,"iptables -t mangle -D POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d 2> /dev/null\n",
++						sprintf(bufor,"/usr/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d 2> /dev/null\n",
  							prot,config[1][(int_cnt*6)+2],sport,dst,dport,(1000*atoi(config[1][(int_cnt*6)+3]))+102+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  						fputs(bufor,fp);
  					    }
@@ -645,14 +645,14 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  					    if (!strcmp(prot,"icmp") && !strcmp("icmp",prot))
  					    {
 -						sprintf(bufor,"/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d 2> /dev/null\n",
-+						sprintf(bufor,"iptables -t mangle -D POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d 2> /dev/null\n",
++						sprintf(bufor,"/usr/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d 2> /dev/null\n",
  							prot,config[1][(int_cnt*6)+2],dst,(1000*atoi(config[1][(int_cnt*6)+3]))+101+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  						fputs(bufor,fp);
  					    }
  					    else
  					    {
 -						sprintf(bufor,"/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d 2> /dev/null\n",
-+						sprintf(bufor,"iptables -t mangle -D POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d 2> /dev/null\n",
++						sprintf(bufor,"/usr/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d 2> /dev/null\n",
  							prot,config[1][(int_cnt*6)+2],sport,dst,dport,(1000*atoi(config[1][(int_cnt*6)+3]))+101+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  						fputs(bufor,fp);
  					    }
@@ -661,14 +661,14 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  					    if (!strcmp(prot,"icmp") && !strcmp("icmp",prot))
  					    {
 -						sprintf(bufor,"/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d 2> /dev/null\n",
-+						sprintf(bufor,"iptables -t mangle -D POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d 2> /dev/null\n",
++						sprintf(bufor,"/usr/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s -d %s -j MARK --set-mark %d 2> /dev/null\n",
  							prot,config[1][(int_cnt*6)+2],dst,(1000*atoi(config[1][(int_cnt*6)+3]))+100+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  						fputs(bufor,fp);
  					    }
  					    else
  					    {
 -				    	        sprintf(bufor,"/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d 2> /dev/null\n",
-+				    	        sprintf(bufor,"iptables -t mangle -D POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d 2> /dev/null\n",
++				    	        sprintf(bufor,"/usr/sbin/iptables -t mangle -D POSTROUTING -p %s -s %s --sport %s -d %s --dport %s -j MARK --set-mark %d 2> /dev/null\n",
  							prot,config[1][(int_cnt*6)+2],sport,dst,dport,(1000*atoi(config[1][(int_cnt*6)+3]))+100+(4*(get_ip_cnt(config[1][(int_cnt*6)+2])+4)));
  						fputs(bufor,fp);
  					    }
@@ -677,7 +677,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  			else
  			{
 -			    sprintf(bufor,"/sbin/iptables -t mangle -D POSTROUTING -s %s -j MARK --set-mark %d\n",
-+			    sprintf(bufor,"iptables -t mangle -D POSTROUTING -s %s -j MARK --set-mark %d\n",
++			    sprintf(bufor,"/usr/sbin/iptables -t mangle -D POSTROUTING -s %s -j MARK --set-mark %d\n",
  			        config[1][(int_cnt*6)+2],(1000*atoi(config[1][(int_cnt*6)+3]))+get_ip_cnt(config[1][(int_cnt*6)+2])+4);
  			    fputs(bufor,fp);
  
@@ -686,18 +686,18 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		}
  	    }
 -	    sprintf(pop,"/sbin/iptables -X shaper%d 2> /dev/null\n",shaperd_counter);
-+	    sprintf(pop,"iptables -X shaper%d 2> /dev/null\n",shaperd_counter);
++	    sprintf(pop,"/usr/sbin/iptables -X shaper%d 2> /dev/null\n",shaperd_counter);
  	    fputs(pop,fp);
  	    if (divide_upload)
  	    {
 -		sprintf(pop,"/sbin/iptables -X shaout%d 2> /dev/null\n",shaperd_counter);
-+		sprintf(pop,"iptables -X shaout%d 2> /dev/null\n",shaperd_counter);
++		sprintf(pop,"/usr/sbin/iptables -X shaout%d 2> /dev/null\n",shaperd_counter);
  	        fputs(pop,fp);
  	    }
  	    if (squid)
  	    {
 -		sprintf(pop,"/sbin/iptables -X squid%d 2> /dev/null\n",shaperd_counter);
-+		sprintf(pop,"iptables -X squid%d 2> /dev/null\n",shaperd_counter);
++		sprintf(pop,"/usr/sbin/iptables -X squid%d 2> /dev/null\n",shaperd_counter);
  		fputs(pop,fp);
  	    }
  
@@ -706,32 +706,32 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  	    	    if (squid)
  		    {
 -//			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
-+//			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
++//			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
  //			    config[1][(pos*6)+3],squid_port,atoi(config[1][(pos*6)+5])*1000);
 -			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d 2> /dev/null\n",
-+			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d 2> /dev/null\n",
++			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d 2> /dev/null\n",
  			    config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4],atoi(config[1][(pos*6)+5])*1000);
  			fputs(bufor,fp);
 -//			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
-+//			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
++//			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d -m tos --tos 0 -j MARK --set-mark %d\n",
  //			    config[1][(pos*6)+3],squid_port,atoi(config[1][(pos*6)+5])*1000);
 -			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d 2> /dev/null\n",
-+			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d 2> /dev/null\n",
++			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 0 -j MARK --set-mark %d 2> /dev/null\n",
  			    config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4],atoi(config[1][(pos*6)+5])*1000);
  			fputs(bufor,fp);
  
 -//			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport ! %d -j MARK --set-mark %d\n",
-+//			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p tcp --src %s --sport ! %d -j MARK --set-mark %d\n",
++//			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport ! %d -j MARK --set-mark %d\n",
  //			    config[1][(pos*6)+3],squid_port,atoi(config[1][(pos*6)+5])*1000);
 -			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport ! %d --dst %s -j MARK --set-mark %d 2> /dev/null\n",
-+			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p tcp --src %s --sport ! %d --dst %s -j MARK --set-mark %d 2> /dev/null\n",
++			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport ! %d --dst %s -j MARK --set-mark %d 2> /dev/null\n",
  			    config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4],atoi(config[1][(pos*6)+5])*1000);
  			fputs(bufor,fp);
 -//			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport ! %d -j MARK --set-mark %d\n",
-+//			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p udp --src %s --sport ! %d -j MARK --set-mark %d\n",
++//			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport ! %d -j MARK --set-mark %d\n",
  //			    config[1][(pos*6)+3],squid_port,atoi(config[1][(pos*6)+5])*1000);
 -			sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport ! %d --dst %s -j MARK --set-mark %d 2> /dev/null\n",
-+			sprintf(bufor,"iptables -D POSTROUTING -t mangle -p udp --src %s --sport ! %d --dst %s -j MARK --set-mark %d 2> /dev/null\n",
++			sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport ! %d --dst %s -j MARK --set-mark %d 2> /dev/null\n",
  			    config[1][(pos*6)+3],squid_port,config[1][(pos*6)+4],atoi(config[1][(pos*6)+5])*1000);
  			fputs(bufor,fp);
  		    }
@@ -740,7 +740,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
      	    if (squid)
  	    {
 -		sprintf(bufor,"/sbin/iptables -D OUTPUT -j squid%d 2> /dev/null\n",shaperd_counter);
-+		sprintf(bufor,"iptables -D OUTPUT -j squid%d 2> /dev/null\n",shaperd_counter);
++		sprintf(bufor,"/usr/sbin/iptables -D OUTPUT -j squid%d 2> /dev/null\n",shaperd_counter);
  		fputs(bufor,fp);
  	    }
      	    for(n=1;n<iplista_pos;n++)
@@ -749,22 +749,22 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  			if (extended_queue)
  			{
 -			    sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
-+			    sprintf(bufor,"iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
++			    sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
  			        config[1][(pos*6)+3],squid_port,ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			    fputs(bufor,fp);
 -			    sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
-+			    sprintf(bufor,"iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
++			    sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			    fputs(bufor,fp);
  			}
  			else
  			{
 -			    sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
-+			    sprintf(bufor,"iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
++			    sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p tcp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(4*(get_ip_cnt(ptr -> str_ip)+4))+(1000*atoi(config[1][(pos*6)+5])));
  			    fputs(bufor,fp);
 -			    sprintf(bufor,"/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
-+			    sprintf(bufor,"iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
++			    sprintf(bufor,"/usr/sbin/iptables -D POSTROUTING -t mangle -p udp --src %s --sport %d --dst %s -m tos --tos 8 -j MARK --set-mark %d 2> /dev/null\n",
  				config[1][(pos*6)+3],squid_port,ptr -> str_ip,(4*(get_ip_cnt(ptr -> str_ip)+4))+(1000*atoi(config[1][(pos*6)+5])));
  			    fputs(bufor,fp);
  			}
@@ -773,19 +773,19 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		    {
  			//download
 -			sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -j MARK --set-mark %d 2> /dev/null\n",
-+			sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -j MARK --set-mark %d 2> /dev/null\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -j MARK --set-mark %d 2> /dev/null\n",
  				ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+103+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d 2> /dev/null\n",
-+			sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d 2> /dev/null\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x04 -j MARK --set-mark %d 2> /dev/null\n",
  				ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+102+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d 2> /dev/null\n",
-+			sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d 2> /dev/null\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x08 -j MARK --set-mark %d 2> /dev/null\n",
  				ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
 -			sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d 2> /dev/null\n",
-+			sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d 2> /dev/null\n",
++			sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -m tos --tos 0x10 -j MARK --set-mark %d 2> /dev/null\n",
  				ptr -> str_ip,(1000*atoi(config[1][(pos*6)+5]))+100+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  			fputs(bufor,fp);
  		    }
@@ -794,26 +794,26 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  			    if (! extended_queue)
  			    {
 -				sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d 2> /dev/null\n",
-+				sprintf(bufor,"iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d 2> /dev/null\n",
++				sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d 2> /dev/null\n",
  					ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+get_ip_cnt(ptr -> str_ip)+4);
  			        fputs(bufor,fp);
  			    }
  			    else
  			    {
 -				sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d 2> /dev/null\n",
-+				sprintf(bufor,"iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d 2> /dev/null\n",
++				sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -j MARK --set-mark %d 2> /dev/null\n",
  					ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+103+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  				fputs(bufor,fp);
 -				sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d 2> /dev/null\n",
-+				sprintf(bufor,"iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d 2> /dev/null\n",
++				sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -s %s -d ! %s -m tos --tos 0x04 -j MARK --set-mark %d 2> /dev/null\n",
  					ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+102+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  				fputs(bufor,fp);
 -				sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d 2> /dev/null\n",
-+				sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d 2> /dev/null\n",
++				sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -d ! %s -m tos --tos 0x08 -j MARK --set-mark %d 2> /dev/null\n",
  					ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+101+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  				fputs(bufor,fp);
 -				sprintf(bufor,"/sbin/iptables -t mangle -D FORWARD -d %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d 2> /dev/null\n",
-+				sprintf(bufor,"iptables -t mangle -D FORWARD -d %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d 2> /dev/null\n",
++				sprintf(bufor,"/usr/sbin/iptables -t mangle -D FORWARD -d %s -d ! %s -m tos --tos 0x10 -j MARK --set-mark %d 2> /dev/null\n",
  					ptr -> str_ip,config[1][(pos*6)+3],(1000*atoi(config[1][(pos2*6)+3]))+100+(4*(get_ip_cnt(ptr -> str_ip)+4)));
  				fputs(bufor,fp);
  			    }
@@ -822,21 +822,21 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  	    
  	    // download
 -	    sprintf(pop1,"/sbin/iptables -Z shaper%d\n",shaperd_counter);
-+	    sprintf(pop1,"iptables -Z shaper%d\n",shaperd_counter);
++	    sprintf(pop1,"/usr/sbin/iptables -Z shaper%d\n",shaperd_counter);
  	    fputs(pop1,fp);
  
  	    if (squid)
  	    {
  		// squid
 -		sprintf(pop1,"/sbin/iptables -Z squid%d\n",shaperd_counter);
-+		sprintf(pop1,"iptables -Z squid%d\n",shaperd_counter);
++		sprintf(pop1,"/usr/sbin/iptables -Z squid%d\n",shaperd_counter);
  		fputs(pop1,fp);
  	    }
  	    if (divide_upload)
  	    {
  	    // upload
 -		sprintf(pop1,"/sbin/iptables -Z shaout%d\n",shaperd_counter);
-+		sprintf(pop1,"iptables -Z shaout%d\n",shaperd_counter);
++		sprintf(pop1,"/usr/sbin/iptables -Z shaout%d\n",shaperd_counter);
  	        fputs(pop1,fp);
  	    }
  	}
@@ -845,7 +845,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
      char	com[100];
  
 -    sprintf(com,"/sbin/iptables -L -n 2> /dev/null\n");
-+    sprintf(com,"iptables -L -n 2> /dev/null\n");
++    sprintf(com,"/usr/sbin/iptables -L -n 2> /dev/null\n");
      if (fp = popen(com,"r"))
      {
  	fgets(buf,1000,fp);
@@ -854,7 +854,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  	char	buf2[100];
  	
 -	sprintf(buf2,"/sbin/iptables -vxL squid%d -n 2>> %s",shaperd_counter,output);
-+	sprintf(buf2,"iptables -vxL squid%d -n 2>> %s",shaperd_counter,output);
++	sprintf(buf2,"/usr/sbin/iptables -vxL squid%d -n 2>> %s",shaperd_counter,output);
  	if (!(fp = popen(buf2,"r")))
  	{
  	    syslog(LOG_ERR,"Can't read squid table from iptables");
