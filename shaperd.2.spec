@@ -61,7 +61,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc COPYING
+%doc changes.txt
+%dir %{_sysconfdir}/shaper
 %attr(640,root,root) %verify(not size md5 mtime) %config(noreplace) %{_sysconfdir}/shaper/*
 %attr(755,root,root) %{_sbindir}/shaperd
 %attr(754,root,root) %{_initrddir}/shaperd
