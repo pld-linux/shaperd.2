@@ -8,6 +8,7 @@ Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
 # Changed source to decrease traffic at republika.pl
 Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
+# Source0-md5:	e515c0044d14d0afea8b222c7d4b7c93
 Source1:        %{name}.init
 #URL:		http://sp9wun.republika.pl/linux/shaperd_cbq.html
 URL:		http://www.cbq.trzepak.net/linux/shaperd_cbq.html
