@@ -53,7 +53,10 @@ case "$1" in
 		msg_not_running Shaperd
 	fi
 	;;
-  restart|force-reload)
+  reload)
+	killall -HUP shaperd
+	;;
+  restart)
 	$0 stop
 	# Does shaperd need a break?
 	if [ -n "$SHAPERD_DELAY" ]; then
@@ -68,7 +71,7 @@ case "$1" in
 	exit $?
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|force-reload|status}"
+	msg_usage "$0 {start|stop|reload|restart|status}"
 	exit 3
 esac
 
