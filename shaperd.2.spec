@@ -2,7 +2,7 @@ Summary:	Shaperd (CBQ) - bandwidth limiting
 Summary(pl):	Shaperd (CBQ) - dzielenie ³±cza
 Name:		shaperd.2
 Version:	2.2
-Release:	2
+Release:	3
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
@@ -18,6 +18,8 @@ Requires(post,preun):	/sbin/chkconfig
 Requires:	firewall-userspace-tool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_phpdir		/home/services/httpd/html
+
 %description
 This program limits bandwidth on the ethernet/ppp interface and
 divides it between the hosts in the local network.
@@ -25,6 +27,18 @@ divides it between the hosts in the local network.
 %description -l pl
 Program potrafi ograniczaæ przepustowo¶æ interfejsu ethernet/ppp oraz
 dzieliæ dostêpne pasmo pomiêdzy komputery w sieci lokalnej.
+
+%package php
+Summary:	PHP script for shaperd
+Summary(pl):	Skrypt PHP dla shaperd
+Group:		Networking/Admin
+Requires:	%{name} = %{version}
+
+%description php
+PHP script for Shaperd.
+
+%description php -l pl
+Skrypt PHP dla Shaperd-a.
 
 %prep
 %setup -q -n %{name}
@@ -41,10 +55,11 @@ cd usr/src/shaperd
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/shaper,%{_initrddir},/var/lib/shaper}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir}/shaper,%{_initrddir},/var/lib/shaper,%{_phpdir}}
 
 install usr/src/shaperd/shaperd $RPM_BUILD_ROOT%{_sbindir}
 install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}/shaper
+install var/www/html/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
 install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
 
 %clean
@@ -68,9 +83,13 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc changes.txt var/www/html/kto.php usr/share/doc/shaper/*
+%doc changes.txt usr/share/doc/shaper/*
 %dir %{_sysconfdir}/shaper
 %attr(640,root,root) %verify(not size md5 mtime) %config(noreplace) %{_sysconfdir}/shaper/*
 %attr(755,root,root) %{_sbindir}/shaperd
 %attr(754,root,root) %{_initrddir}/shaperd
 %dir /var/lib/shaper
+
+%files php
+%defattr(644,root,root,755)
+%attr(644,root,root) %{_phpdir}/shaperd.php
