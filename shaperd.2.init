@@ -4,8 +4,8 @@
 #
 # chkconfig:	345 83 17
 #
-# description:	Shaperd is a deamon to control internet incoming LAN \
-#		traffic.
+# description:	Shaperd is a deamon to divide bandwitdh between LAN \
+#		clients.
 #
 # Author:	Adam Piatyszek "ediap" <ediap@et.put.poznan.pl>
 
@@ -16,7 +16,10 @@
 # Get network config
 . /etc/sysconfig/network
 
-# Check that networkin is up
+# Configuration file
+[ -f /etc/sysconfig/shaperd ] && . /etc/sysconfig/shaperd
+
+# Check whether networking is up
 if is_yes "${NETWORKING}"; then
 	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
 		msg_network_down Shaperd
@@ -30,7 +33,7 @@ RETVAL=0
 # See how we were called.
 case "$1" in
   start) 
-	# Check if the service is already running?
+	# Check if the service is already running
 	if [ ! -f /var/lock/subsys/shaperd ]; then
 		msg_starting Shaperd 
 		daemon /usr/sbin/shaperd
@@ -52,6 +55,11 @@ case "$1" in
 	;;
   restart|force-reload)
 	$0 stop
+	# Does shaperd need a break?
+	if [ -n "$SHAPERD_DELAY" ]; then
+		echo "Waiting $SHAPERD_DELAY seconds..."
+		sleep $SHAPERD_DELAY
+	fi
 	$0 start
 	exit $?
 	;;
