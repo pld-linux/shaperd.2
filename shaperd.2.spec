@@ -2,7 +2,7 @@ Summary:	Shaperd (CBQ) - bandwidth limiting
 Summary(pl):	Shaperd (CBQ) - dzielenie ³±cza
 Name:		shaperd.2
 Version:	2.2
-Release:	3
+Release:	4
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
@@ -33,6 +33,9 @@ Summary:	PHP script for shaperd
 Summary(pl):	Skrypt PHP dla shaperd
 Group:		Networking/Admin
 Requires:	%{name} = %{version}
+Requires:	php
+Requires:	webserver
+BuildArch:	noarch
 
 %description php
 PHP script for Shaperd.
