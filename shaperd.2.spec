@@ -11,7 +11,7 @@ Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
 # Source0-md5:	b9b8de9c3b83668cd50b7b63e0d3ff56
 # Source0-size:	151795
 Source1:	%{name}.init
-Source2:        %{name}.conf
+Source2:	%{name}.conf
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-iptables_path.patch
 #URL:		http://sp9wun.republika.pl/linux/shaperd_cbq.html
@@ -22,7 +22,7 @@ Requires:	firewall-userspace-tool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_phpdir		%{_datadir}/%{name}
-%define         _sysconfdir     /etc/%{name}
+%define		_sysconfdir	/etc/%{name}
 
 %description
 This program limits bandwidth on the ethernet/ppp interface and
@@ -41,10 +41,10 @@ Requires:	php
 Requires:	webserver
 
 %description php
-PHP script for Shaperd.
+PHP script for shaperd.
 
 %description php -l pl
-Skrypt PHP dla Shaperd-a.
+Skrypt PHP dla shaperd.
 
 %prep
 %setup -q -n shaperd
@@ -69,7 +69,6 @@ install var/www/html/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
 install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
 
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -80,14 +79,13 @@ if [ -f /var/lock/subsys/shaperd ]; then
 else
 	echo "Run \"/etc/rc.d/init.d/shaperd start\" to start shaperd daemon." >&2
 fi
-
 if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
-        echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
+	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
 elif [ -d /etc/httpd/httpd.conf ]; then
-        ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
+	ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
 fi
 if [ -f /var/lock/subsys/httpd ]; then
-        /usr/sbin/apachectl restart 1>&2
+	/usr/sbin/apachectl restart 1>&2
 fi
 
 %preun
@@ -97,21 +95,19 @@ if [ "$1" = "0" ]; then
 	fi
 	/sbin/chkconfig --del shaperd
 fi
-
 if [ "$1" = "0" ]; then
-        umask 027
-        if [ -d /etc/httpd/httpd.conf ]; then
-                rm -f /etc/httpd/httpd.conf/99_%{name}.conf
-        else
-                grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
-                        /etc/httpd/httpd.conf.tmp
-                mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
-                if [ -f /var/lock/subsys/httpd ]; then
-                        /usr/sbin/apachectl restart 1>&2
-                fi
-        fi
+	umask 027
+	if [ -d /etc/httpd/httpd.conf ]; then
+		rm -f /etc/httpd/httpd.conf/99_%{name}.conf
+	else
+		grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
+			/etc/httpd/httpd.conf.tmp
+		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
+		if [ -f /var/lock/subsys/httpd ]; then
+			/usr/sbin/apachectl restart 1>&2
+		fi
+	fi
 fi
-
 
 %files
 %defattr(644,root,root,755)
