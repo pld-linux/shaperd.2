@@ -22,6 +22,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_phpdir		%{_datadir}/%{name}
 %define		_sysconfdir	/etc/%{name}
+%define		_apache1dir	/etc/apache
+%define		_apache2dir	/etc/httpd
 
 %description
 This program limits bandwidth on the ethernet/ppp interface and
@@ -66,7 +68,7 @@ install shaperd $RPM_BUILD_ROOT%{_sbindir}
 install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}
 install var/www/html/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
 install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/httpd/%{name}.conf
+install %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/apache-%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -78,13 +80,20 @@ if [ -f /var/lock/subsys/shaperd ]; then
 else
 	echo "Run \"/etc/rc.d/init.d/shaperd start\" to start shaperd daemon." >&2
 fi
-if [ -f /etc/httpd/httpd.conf ] && ! grep -q "^Include.*%{name}.conf" /etc/httpd/httpd.conf; then
-	echo "Include /etc/httpd/%{name}.conf" >> /etc/httpd/httpd.conf
-elif [ -d /etc/httpd/httpd.conf ]; then
-	ln -sf /etc/httpd/%{name}.conf /etc/httpd/httpd.conf/99_%{name}.conf
+
+# apache1
+if [ -d %{_apache1dir}/conf.d ]; then
+        ln -sf %{_sysconfdir}/apache-%{name}.conf %{_apache1dir}/conf.d/99_%{name}.conf
+        if [ -f /var/lock/subsys/apache ]; then
+                /etc/rc.d/init.d/apache restart 1>&2
+        fi
 fi
-if [ -f /var/lock/subsys/httpd ]; then
-	/usr/sbin/apachectl restart 1>&2
+# apache2
+if [ -d %{_apache2dir}/httpd.conf ]; then
+        ln -sf %{_sysconfdir}/apache-%{name}.conf %{_apache2dir}/httpd.conf/99_%{name}.conf
+        if [ -f /var/lock/subsys/httpd ]; then
+                /etc/rc.d/init.d/httpd restart 1>&2
+        fi
 fi
 
 %preun
@@ -95,17 +104,20 @@ if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del shaperd
 fi
 if [ "$1" = "0" ]; then
-	umask 027
-	if [ -d /etc/httpd/httpd.conf ]; then
-		rm -f /etc/httpd/httpd.conf/99_%{name}.conf
-	else
-		grep -v "^Include.*%{name}.conf" /etc/httpd/httpd.conf > \
-			/etc/httpd/httpd.conf.tmp
-		mv -f /etc/httpd/httpd.conf.tmp /etc/httpd/httpd.conf
-		if [ -f /var/lock/subsys/httpd ]; then
-			/usr/sbin/apachectl restart 1>&2
-		fi
-	fi
+        # apache1
+        if [ -d %{_apache1dir}/conf.d ]; then
+                rm -f %{_apache1dir}/conf.d/99_%{name}.conf
+                if [ -f /var/lock/subsys/apache ]; then
+                        /etc/rc.d/init.d/apache restart 1>&2
+                fi
+        fi
+        # apache2
+        if [ -d %{_apache2dir}/httpd.conf ]; then
+                rm -f %{_apache2dir}/httpd.conf/99_%{name}.conf
+                if [ -f /var/lock/subsys/httpd ]; then
+                        /etc/rc.d/init.d/httpd restart 1>&2
+                fi
+        fi
 fi
 
 %files
@@ -114,7 +126,6 @@ fi
 %doc usr/share/docs/shaperd-2.%{version}/shaperd_cbq_en.html
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
-%config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
 %attr(755,root,root) %{_sbindir}/shaperd
 %attr(754,root,root) %{_initrddir}/shaperd
 %dir /var/lib/shaper
