@@ -2,7 +2,7 @@ Summary:	Shaperd - bandwidth limiting
 Summary(pl):	Shaperd - dzielenie ³±cza
 Name:		shaperd.2
 Version:	2.24
-Release:	0.9
+Release:	0.10
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
@@ -22,6 +22,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_phpdir		%{_datadir}/%{name}
 %define		_sysconfdir	/etc/%{name}
+%define		_initdir	/etc/rc.d/init.d
 %define		_apache1dir	/etc/apache
 %define		_apache2dir	/etc/httpd
 
@@ -62,12 +63,12 @@ Skrypt PHP dla shaperd.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir},%{_initrddir},/var/lib/shaper,%{_phpdir},/etc/httpd}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir},%{_initdir},/var/lib/shaper,%{_phpdir},/etc/httpd}
 
 install shaperd $RPM_BUILD_ROOT%{_sbindir}
 install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}
 install var/www/html/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
-install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
+install %{SOURCE1} $RPM_BUILD_ROOT%{_initdir}/shaperd
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/apache-%{name}.conf
 
 %clean
@@ -127,7 +128,7 @@ fi
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
 %attr(755,root,root) %{_sbindir}/shaperd
-%attr(754,root,root) %{_initrddir}/shaperd
+%attr(754,root,root) %{_initdir}/shaperd
 %dir /var/lib/shaper
 
 %files php
