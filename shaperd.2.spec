@@ -2,7 +2,7 @@ Summary:	Shaperd - bandwidth limiting
 Summary(pl):	Shaperd - dzielenie ³±cza
 Name:		shaperd.2
 Version:	2.24
-Release:	0.10
+Release:	0.11
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
@@ -82,6 +82,15 @@ else
 	echo "Run \"/etc/rc.d/init.d/shaperd start\" to start shaperd daemon." >&2
 fi
 
+%preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/shaperd ]; then
+		/etc/rc.d/init.d/shaperd stop >&2
+	fi
+	/sbin/chkconfig --del shaperd
+fi
+
+%post php
 # apache1
 if [ -d %{_apache1dir}/conf.d ]; then
 	ln -sf %{_sysconfdir}/apache-%{name}.conf %{_apache1dir}/conf.d/99_%{name}.conf
@@ -97,13 +106,7 @@ if [ -d %{_apache2dir}/httpd.conf ]; then
 	fi
 fi
 
-%preun
-if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/shaperd ]; then
-		/etc/rc.d/init.d/shaperd stop >&2
-	fi
-	/sbin/chkconfig --del shaperd
-fi
+%preun php
 if [ "$1" = "0" ]; then
 	# apache1
 	if [ -d %{_apache1dir}/conf.d ]; then
@@ -126,12 +129,13 @@ fi
 %doc kto-daemon usr/share/docs/shaperd-2.%{version}/shaperd_cbq.html
 %doc usr/share/docs/shaperd-2.%{version}/shaperd_cbq_en.html
 %dir %{_sysconfdir}
-%attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
+%attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/[iqs]*
 %attr(755,root,root) %{_sbindir}/shaperd
 %attr(754,root,root) %{_initrddir}/shaperd
 %dir /var/lib/shaper
 
 %files php
 %defattr(644,root,root,755)
+%attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/apache-%{name}.conf
 %dir %{_phpdir}
 %attr(644,root,root) %{_phpdir}/shaperd.php
