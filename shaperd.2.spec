@@ -1,15 +1,14 @@
 Summary:	Shaperd - bandwidth limiting
 Summary(pl):	Shaperd - dzielenie ³±cza
 Name:		shaperd.2
-Version:	2.11
-Release:	2
+Version:	2.24
+Release:	0.9
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
 # Changed source to decrease traffic at republika.pl
 Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
-# Source0-md5:	b9b8de9c3b83668cd50b7b63e0d3ff56
-# Source0-size:	151795
+# Source0-md5:	e6e7a91c5c08e2dbcf8c48fa54bff559
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Patch0:		%{name}-fhs.patch
@@ -111,7 +110,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc changes.txt kto-daemon usr/share/docs/shaperd-2.2.11/shaperd_cbq.html
+%doc kto-daemon usr/share/docs/shaperd-2.%{version}/shaperd_cbq.html
+%doc usr/share/docs/shaperd-2.%{version}/shaperd_cbq_en.html
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/*
 %config(noreplace) %verify(not size mtime md5) /etc/httpd/%{name}.conf
