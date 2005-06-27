@@ -1,6 +1,6 @@
-diff -Nur old/etc/shaper/shaper.0.cfg new/etc/shaper/shaper.0.cfg
---- old/etc/shaper/shaper.0.cfg	2004-10-17 10:40:05.000000000 +0000
-+++ new/etc/shaper/shaper.0.cfg	2005-03-20 00:29:32.000000000 +0000
+diff -Nur old/config/shaper.0.cfg new/config/shaper.0.cfg
+--- old/config/shaper.0.cfg	2004-12-22 11:18:47.000000000 +0000
++++ new/config/shaper.0.cfg	2005-06-26 12:17:14.791599704 +0000
 @@ -203,7 +203,7 @@
  # last_rate_perm=600
  last_rate_perm=644
@@ -10,50 +10,9 @@ diff -Nur old/etc/shaper/shaper.0.cfg new/etc/shaper/shaper.0.cfg
  # default:
  # write_type=0
  write_type=0
-diff -Nur old/shaperd_old.c new/shaperd_old.c
---- old/shaperd_old.c	2004-11-11 11:15:05.000000000 +0000
-+++ new/shaperd_old.c	2005-03-20 00:26:10.000000000 +0000
-@@ -292,9 +292,9 @@
-     sprintf(pidfile,"/var/run/shaperd.%d.pid",shaperd_counter);
-     sprintf(ignorefile,"/etc/shaper/ignore.%d",shaperd_counter);
-     sprintf(iplistfile,"/etc/shaper/iplist.%d",shaperd_counter);
--    sprintf(oldfile,"/var/shaper/bitrate_user_sh.%d.old",shaperd_counter);
--    sprintf(oldfile_upload,"/var/shaper/bitrate_user_up.%d.old",shaperd_counter);
--    sprintf(lastrate,"/var/shaper/last.%d",shaperd_counter);
-+    sprintf(oldfile,"/var/lib/shaper/bitrate_user_sh.%d.old",shaperd_counter);
-+    sprintf(oldfile_upload,"/var/lib/shaper/bitrate_user_up.%d.old",shaperd_counter);
-+    sprintf(lastrate,"/var/lib/shaper/last.%d",shaperd_counter);
- 
-     // czytamy liste interfejsow w systemie
-     if (debug>2) printf("debug 3: reading list of system interfaces\n");
-@@ -776,8 +776,8 @@
- 
-     if (! olddelay)
-     {
--	if (debug > 1) printf("Creating bandwidth allocation files in /var/shaper/ directory disabled\n");
--	syslog(LOG_INFO, "Creating bandwidth allocation files in /var/shaper/ directory disabled\n");
-+	if (debug > 1) printf("Creating bandwidth allocation files in /var/lib/shaper/ directory disabled\n");
-+	syslog(LOG_INFO, "Creating bandwidth allocation files in /var/lib/shaper/ directory disabled\n");
-     }
- 
-     if (!quick_start)
-@@ -2432,11 +2432,11 @@
- */
- 		}
- 	    }
--	    if (debug>2) printf("debug 3: writing /var/shaper/bitrate_user_sh.%d.old file\n",shaperd_counter);
-+	    if (debug>2) printf("debug 3: writing /var/lib/shaper/bitrate_user_sh.%d.old file\n",shaperd_counter);
- 	    write_bitrate_user_last(bitrate_user_last,oldfile,int_cnt);
- 	    if (divide_upload)
- 	    {
--		if (debug>2) printf("debug 3: writing /var/shaper/bitrate_user_up.%d.old file\n",shaperd_counter);
-+		if (debug>2) printf("debug 3: writing /var/lib/shaper/bitrate_user_up.%d.old file\n",shaperd_counter);
- 		write_bitrate_user_last_upload(bitrate_user_last_upload,oldfile_upload,int_cnt);
- 	    }
- 	    old = 0;
-diff -Nur old/usr/share/docs/shaperd-2.2.24/shaperd_cbq_en.html new/usr/share/docs/shaperd-2.2.24/shaperd_cbq_en.html
---- old/usr/share/docs/shaperd-2.2.24/shaperd_cbq_en.html	2004-11-11 11:30:13.000000000 +0000
-+++ new/usr/share/docs/shaperd-2.2.24/shaperd_cbq_en.html	2005-03-20 00:26:42.000000000 +0000
+diff -Nur old/doc/shaperd_cbq_en.html new/doc/shaperd_cbq_en.html
+--- old/doc/shaperd_cbq_en.html	2004-12-22 11:18:47.000000000 +0000
++++ new/doc/shaperd_cbq_en.html	2005-06-26 12:17:14.810596816 +0000
 @@ -101,7 +101,7 @@
  highest CIR (lospeed - minimum guaraneed speed) to lowest CIR. This change I made esspecially for commercial networks.</li>
  
@@ -81,9 +40,9 @@ diff -Nur old/usr/share/docs/shaperd-2.2.24/shaperd_cbq_en.html new/usr/share/do
  <pre>
  192.168.1.2 40000
  192.168.1.9 58000
-diff -Nur old/usr/share/docs/shaperd-2.2.24/shaperd_cbq.html new/usr/share/docs/shaperd-2.2.24/shaperd_cbq.html
---- old/usr/share/docs/shaperd-2.2.24/shaperd_cbq.html	2004-11-11 11:30:08.000000000 +0000
-+++ new/usr/share/docs/shaperd-2.2.24/shaperd_cbq.html	2005-03-20 00:26:42.000000000 +0000
+diff -Nur old/doc/shaperd_cbq.html new/doc/shaperd_cbq.html
+--- old/doc/shaperd_cbq.html	2004-12-22 11:18:47.000000000 +0000
++++ new/doc/shaperd_cbq.html	2005-06-26 12:17:14.801598184 +0000
 @@ -105,7 +105,7 @@
          <li>Poprawiono kontrolê sk³adni we wpisie <b>inter_int</b> (czy lospeed i hispeed >0)</li>
          <li>Dodatno ubs³ugê sygna³u <a href="#SIGUSR1"><b>SIGUSR1</b></a></li>
@@ -142,10 +101,22 @@ diff -Nur old/usr/share/docs/shaperd-2.2.24/shaperd_cbq.html new/usr/share/docs/
  <li>Przy starcie systemu skrypt startowy <b>/etc/init.d/shaperd</b> uruchamiaj mo¿liwie na koñcu a w szczególno¶ci zawsze uruchamiaj go po jakichkolwiek skryptach, które mog± modyfikowaæ <b>firewall</b> (np. wszelkie skrypty do konfiguracji maskarady, firewalla itp.).</li><br><br>
  <li>Je¶li wykonywa³e¶ jakiekolwiek operacjie na firewallu (wyczy¶ci³e¶ liczniki regu³ek, dopisa³e¶ lub skasowa³e¶ jakie¶ regu³ki, prze³adowa³e¶ firewall itp.) obowi±zkowo zrestartuj <b>shaperd</b>. Zaniechanie tego mo¿e skutkowaæ zd³awieniem ca³ego transferu przychodz±cego, poniewa¿ <b>shaperd</b> przy starcie tworzy w³asne regu³ki na firewall'u i musz± byæ one sprawdzane w pierwszej kolejno¶ci. Zmiana kolejno¶ci regu³ na firewallu mo¿e (choæ nie musi) skutkowaæ tym, ¿e regu³y rejestruj±ce ruch przychodz±cy dla shaper'a niczego nie bêd± rejestrowaæ i daemon stwierdzi, ¿e nikt nie wykorzystuje przydzielonych wide³ek wiêc zacznie obni¿aæ przydzia³y (a¿ do minimum gwarantowanego). Aby sprawdziæ czy regu³y dla shapera znajduj± siê na w³a¶ciwym miejscu i pracuj± prawid³owo wystarczy zrobiæ nastêpuj±c± operacjê:<ul>
  <li>dla ipchains:<ul>
-diff -Nur old/var/www/html/kto.php new/var/www/html/kto.php
---- old/var/www/html/kto.php	2004-07-19 20:58:01.000000000 +0000
-+++ new/var/www/html/kto.php	2005-03-20 00:26:49.000000000 +0000
-@@ -147,7 +147,7 @@
+diff -Nur old/Makefile new/Makefile
+--- old/Makefile	2004-12-22 11:32:50.000000000 +0000
++++ new/Makefile	2005-06-26 12:17:14.921579944 +0000
+@@ -2,7 +2,7 @@
+ INSTALL_PREFIX=""
+ PACKAGE=shaperd-2.2.24
+ CONFIG_DIR=/etc/shaper
+-RUNTIME_DIR=/var/shaper
++RUNTIME_DIR=/var/lib/shaper
+ PID_DIR=/var/run
+ DOC_DIR=/usr/share/doc/
+ SBIN_DIR=/sbin
+diff -Nur old/scripts/kto.php new/scripts/kto.php
+--- old/scripts/kto.php	2005-01-20 14:39:59.000000000 +0000
++++ new/scripts/kto.php	2005-06-26 12:17:14.824594688 +0000
+@@ -153,7 +153,7 @@
      $mail_name='trzepak.net';
  
      // plik z wykorzystaniem limitow
@@ -154,7 +125,7 @@ diff -Nur old/var/www/html/kto.php new/var/www/html/kto.php
      
  // koniec zmiennych edytowanych
  // end of edited section
-@@ -251,8 +251,8 @@
+@@ -259,8 +259,8 @@
  	}
      }
  
@@ -165,3 +136,31 @@ diff -Nur old/var/www/html/kto.php new/var/www/html/kto.php
      if (! $alttlen) $tlen="<a href=\"http://www.tlen.pl/pobierz.html\">Tlen</a>";
  
  // Inicjalizacja generatora liczb losowych
+diff -Nur old/src/shaperd_old.c new/src/shaperd_old.c
+--- old/src/shaperd_old.c	2005-04-17 13:39:34.000000000 +0000
++++ new/src/shaperd_old.c	2005-06-26 12:17:14.911581464 +0000
+@@ -778,8 +778,8 @@
+ 
+     if (! olddelay)
+     {
+-	if (debug > 1) printf("Creating bandwidth allocation files in /var/shaper/ directory disabled\n");
+-	syslog(LOG_INFO, "Creating bandwidth allocation files in /var/shaper/ directory disabled\n");
++	if (debug > 1) printf("Creating bandwidth allocation files in /var/lib/shaper/ directory disabled\n");
++	syslog(LOG_INFO, "Creating bandwidth allocation files in /var/lib/shaper/ directory disabled\n");
+     }
+ 
+     if (!quick_start)
+@@ -2458,11 +2458,11 @@
+ */
+ 		}
+ 	    }
+-	    if (debug>2) printf("debug 3: writing /var/shaper/bitrate_user_sh.%d.old file\n",shaperd_counter);
++	    if (debug>2) printf("debug 3: writing /var/lib/shaper/bitrate_user_sh.%d.old file\n",shaperd_counter);
+ 	    write_bitrate_user_last(bitrate_user_last,oldfile,int_cnt);
+ 	    if (divide_upload)
+ 	    {
+-		if (debug>2) printf("debug 3: writing /var/shaper/bitrate_user_up.%d.old file\n",shaperd_counter);
++		if (debug>2) printf("debug 3: writing /var/lib/shaper/bitrate_user_up.%d.old file\n",shaperd_counter);
+ 		write_bitrate_user_last_upload(bitrate_user_last_upload,oldfile_upload,int_cnt);
+ 	    }
+ 	    old = 0;

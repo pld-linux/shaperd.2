@@ -1,6 +1,6 @@
-diff -Nur old/etc/shaper/shaper.0.cfg new/etc/shaper/shaper.0.cfg
---- old/etc/shaper/shaper.0.cfg	2004-10-17 10:40:05.000000000 +0000
-+++ new/etc/shaper/shaper.0.cfg	2005-03-20 00:34:58.000000000 +0000
+diff -Nur old/config/shaper.0.cfg new/config/shaper.0.cfg
+--- old/config/shaper.0.cfg	2004-12-22 11:18:47.000000000 +0000
++++ new/config/shaper.0.cfg	2005-06-26 12:20:04.501799832 +0000
 @@ -1,5 +1,5 @@
  # ipchains_path=/sbin/ipchains
 -# iptables_path=/sbin/iptables
@@ -8,10 +8,34 @@ diff -Nur old/etc/shaper/shaper.0.cfg new/etc/shaper/shaper.0.cfg
  # tc_path=/sbin/tc
  
  # timeout of tcp connection on masquerade
-diff -Nur old/shaperd_old.c new/shaperd_old.c
---- old/shaperd_old.c	2004-11-11 11:15:05.000000000 +0000
-+++ new/shaperd_old.c	2005-03-20 00:34:50.000000000 +0000
-@@ -202,7 +202,7 @@
+diff -Nur old/doc/shaperd_cbq_en.html new/doc/shaperd_cbq_en.html
+--- old/doc/shaperd_cbq_en.html	2004-12-22 11:18:47.000000000 +0000
++++ new/doc/shaperd_cbq_en.html	2005-06-26 12:20:04.519797096 +0000
+@@ -246,7 +246,7 @@
+ <b>Example of configuration file for server with: 1 local network interface eth0 with 10Mbit bandwidth and 1 internet interface ppp0 with 115Kbit bandwidth (Erricson's HIS)</b> It does not have larger differences in configuration for other types network links (like DSL or Cable).
+ <pre>
+ ipchains_path=/sbin/ipchains
+-iptables_path=/sbin/iptables
++iptables_path=/usr/sbin/iptables
+ tc_path=/sbin/tc
+ timeout_ipchains_22=3600
+ timeout_ipchains_24=7200
+diff -Nur old/doc/shaperd_cbq.html new/doc/shaperd_cbq.html
+--- old/doc/shaperd_cbq.html	2004-12-22 11:18:47.000000000 +0000
++++ new/doc/shaperd_cbq.html	2005-06-26 12:20:04.511798312 +0000
+@@ -295,7 +295,7 @@
+ <b>Przyk³adowy plik konfiguracyjny dla serwera z 1 interfejscem lokalnym eth0 o przepustowo¶ci 10Mbit i ³±czem internetowym ppp0 o maksymalnej przepustowo¶ci 115Kbit (SDI).</b> U¿ywam go dla <b>SDI</b> i normalnej dzier¿awki (po zmianie parametrów dotycz±cych szybko¶ci ;).
+ <pre>
+ ipchains_path=/sbin/ipchains
+-iptables_path=/sbin/iptables
++iptables_path=/usr/sbin/iptables
+ tc_path=/sbin/tc
+ timeout_ipchains_22=3600
+ timeout_ipchains_24=7200
+diff -Nur old/src/shaperd_old.c new/src/shaperd_old.c
+--- old/src/shaperd_old.c	2005-04-17 13:39:34.000000000 +0000
++++ new/src/shaperd_old.c	2005-06-26 12:20:04.619781896 +0000
+@@ -204,7 +204,7 @@
      }
  
      strcpy(ipchains_path,"/sbin/ipchains");
@@ -20,3 +44,12 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
      strcpy(tc_path,"/sbin/tc");
      
      // Start syslog
+@@ -6298,7 +6298,7 @@
+ 	        {
+ 	    	    if (squid)
+ 		    {
+-			sprintf(bufor,"/sbin/iptables -A OUTPUT -o %s -j squid%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
++			sprintf(bufor,"/usr/sbin/iptables -A OUTPUT -o %s -j squid%d\n",config[1][(int_cnt*6)+1],shaperd_counter);
+ 			fputs(bufor,fp);
+ 		    }
+ 		}

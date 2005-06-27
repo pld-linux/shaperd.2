@@ -1,14 +1,16 @@
 Summary:	Shaperd - bandwidth limiting
 Summary(pl):	Shaperd - dzielenie ³±cza
 Name:		shaperd.2
+%define		snap	060505
 Version:	2.24
-Release:	0.11
+Release:	0.%{snap}.1
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
 # Changed source to decrease traffic at republika.pl
-Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
-# Source0-md5:	e6e7a91c5c08e2dbcf8c48fa54bff559
+#Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
+Source0:	http://www.cbq.trzepak.net/prg/shaperd_snapshot.tar.gz
+# Source0-md5:	5695ba2968d40fd7045eb5859f31597f
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Patch0:		%{name}-fhs.patch
@@ -54,20 +56,19 @@ Skrypt PHP dla shaperd.
 %patch1 -p1
 
 %build
-%{__make} clean
-# this file has its own rule in Makefile, without CFLAGS...
-%{__cc} %{rpmcflags} -c shaperd_old.c
-%{__make} \
-	CC=%{__cc} \
-	CFLAGS="%{rpmcflags} -Wall"
+%{__make}
+
+#{__make} \
+#CC=%{__cc} \
+#CFLAGS="%{rpmcflags} -Wall"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_sbindir},%{_sysconfdir},%{_initrddir},/var/lib/shaper,%{_phpdir},/etc/httpd}
 
-install shaperd $RPM_BUILD_ROOT%{_sbindir}
-install etc/shaper/* $RPM_BUILD_ROOT%{_sysconfdir}
-install var/www/html/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
+install src/shaperd $RPM_BUILD_ROOT%{_sbindir}
+install config/* $RPM_BUILD_ROOT%{_sysconfdir}
+install scripts/kto.php $RPM_BUILD_ROOT%{_phpdir}/shaperd.php
 install %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/shaperd
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/apache-%{name}.conf
 
@@ -126,8 +127,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc kto-daemon usr/share/docs/shaperd-2.%{version}/shaperd_cbq.html
-%doc usr/share/docs/shaperd-2.%{version}/shaperd_cbq_en.html
+%doc scripts/kto-daemon doc/shaperd_cbq.html doc/shaperd_cbq_en.html
 %dir %{_sysconfdir}
 %attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/[iqs]*
 %attr(755,root,root) %{_sbindir}/shaperd
