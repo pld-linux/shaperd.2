@@ -1,0 +1,49 @@
+diff -Nur shaperd.old/Makefile shaperd/Makefile
+--- shaperd.old/Makefile	2005-10-29 13:47:51.000000000 +0200
++++ shaperd/Makefile	2005-10-29 14:52:22.000000000 +0200
+@@ -10,7 +10,9 @@
+ 
+ MAKE=make
+ INSTALL=install
+-SYS_CC=gcc
++ifndef $(CC)
++	CC=gcc
++endif
+ 
+ All: sources
+ 
+diff -Nur shaperd.old/src/Makefile shaperd/src/Makefile
+--- shaperd.old/src/Makefile	2005-10-29 13:47:51.000000000 +0200
++++ shaperd/src/Makefile	2005-10-29 14:52:38.000000000 +0200
+@@ -13,24 +13,28 @@
+ 
+ CFLAGS += -Wall
+ 
+-CC = $(SYS_CC) $(DEFINES)
+-
+ shaperd: $(OBJS)
+ 
+ shaperd.o:	shaperd.c shaperd.h
++	$(CC) $(CFLAGS) $(DEFINES) -c $<
+ 
+ shaperd_old.o:	shaperd_old.c shaperd_config.h shaperd_old.h read_config.h read_iplist.h firewall.h
+-	$(CC) -c shaperd_old.c
++	$(CC) $(CFLAGS) $(DEFINES) -c $<
+ 
+ read_config.o:		read_config.c read_config.h read_iplist.h firewall.h shaperd_old.h
++	$(CC) $(CFLAGS) $(DEFINES) -c $<
+ 
+ read_iplist.o:		read_iplist.c read_iplist.h firewall.h shaperd_old.h
++	$(CC) $(CFLAGS) $(DEFINES) -c $<
+ 
+ firewall.o:		firewall.c shaperd_config.h shaperd_old.h read_iplist.h
++	$(CC) $(CFLAGS) $(DEFINES) -c $<
+ 
+ shaperd_cmdline.o:	shaperd_cmdline.c shaperd_config.h shaperd.h
++	$(CC) $(CFLAGS) $(DEFINES) -c $<
+ 
+ shaperd_helpers.o:	shaperd_helpers.c
++	$(CC) $(CFLAGS) $(DEFINES) -c $<
+ 
+ clean-all: 
+ 	rm -f $(OBJS) 
