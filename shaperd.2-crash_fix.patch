@@ -1,0 +1,11 @@
+--- shaperd/src/shaperd_old.c.orig	2005-10-29 14:38:34.000000000 +0200
++++ shaperd/src/shaperd_old.c	2005-10-29 14:38:40.000000000 +0200
+@@ -3150,7 +3150,7 @@
+     int		f1,m,n;
+     struct	stat stbuf;
+     unsigned long int	cnt1,cnt2;
+-    unsigned long int	dd1,dd2,dd3,dd4;
++    unsigned long int	dd1,dd2 = 0,dd3,dd4;
+     char	aa[12][20];
+     char	*src;
+     char	buf[30];
