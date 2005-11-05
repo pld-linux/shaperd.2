@@ -1,8 +1,8 @@
 Summary:	Shaperd - bandwidth limiting
 Summary(pl):	Shaperd - dzielenie ³±cza
 Name:		shaperd.2
-%define		snap	060505
-Version:	2.24
+%define		snap	050805
+Version:	2.25
 Release:	0.%{snap}.1
 License:	GPL
 Group:		Networking/Admin
@@ -10,11 +10,13 @@ Group:		Networking/Admin
 # Changed source to decrease traffic at republika.pl
 #Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
 Source0:	http://www.cbq.trzepak.net/prg/shaperd_snapshot.tar.gz
-# Source0-md5:	5695ba2968d40fd7045eb5859f31597f
+# Source0-md5:	94ab3a29a74c97ad830a4cb3a581dc8f
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-iptables_path.patch
+Patch2:		%{name}-makefile.patch
+Patch3:		%{name}-crash_fix.patch
 #URL:		http://sp9wun.republika.pl/linux/shaperd_cbq.html
 URL:		http://www.cbq.trzepak.net/linux/shaperd_cbq.html
 PreReq:		rc-scripts
@@ -54,13 +56,13 @@ Skrypt PHP dla shaperd.
 %setup -q -n shaperd
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
 
 %build
-%{__make}
-
-#{__make} \
-#CC=%{__cc} \
-#CFLAGS="%{rpmcflags} -Wall"
+%{__make} \
+	CC=%{__cc} \
+	CFLAGS="%{rpmcflags} -Wall"
 
 %install
 rm -rf $RPM_BUILD_ROOT
