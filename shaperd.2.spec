@@ -7,9 +7,9 @@ Release:	0.%{snap}.1
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
-# Changed source to decrease traffic at republika.pl
-#Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
-Source0:	http://www.cbq.trzepak.net/prg/shaperd_snapshot.tar.gz
+# Broken archive
+#Source0:	http://www.cbq.trzepak.net/prg/shaperd_snapshot.tar.gz
+Source0:	http://sp9wun.republika.pl/prg/shaperd_snapshot.tar.gz
 # Source0-md5:	94ab3a29a74c97ad830a4cb3a581dc8f
 Source1:	%{name}.init
 Source2:	%{name}.conf
