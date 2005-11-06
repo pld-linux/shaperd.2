@@ -1,6 +1,6 @@
-diff -Nur shaperd.old/Makefile shaperd/Makefile
---- shaperd.old/Makefile	2005-10-29 13:47:51.000000000 +0200
-+++ shaperd/Makefile	2005-10-29 14:52:22.000000000 +0200
+diff -ur shaperd.orig/Makefile shaperd/Makefile
+--- shaperd.orig/Makefile	2005-11-06 15:45:45.000000000 +0100
++++ shaperd/Makefile	2005-11-06 15:46:13.000000000 +0100
 @@ -10,7 +10,9 @@
  
  MAKE=make
@@ -12,15 +12,18 @@ diff -Nur shaperd.old/Makefile shaperd/Makefile
  
  All: sources
  
-diff -Nur shaperd.old/src/Makefile shaperd/src/Makefile
---- shaperd.old/src/Makefile	2005-10-29 13:47:51.000000000 +0200
-+++ shaperd/src/Makefile	2005-10-29 14:52:38.000000000 +0200
-@@ -13,24 +13,28 @@
+diff -ur shaperd.orig/src/Makefile shaperd/src/Makefile
+--- shaperd.orig/src/Makefile	2005-11-06 15:45:45.000000000 +0100
++++ shaperd/src/Makefile	2005-11-06 15:46:30.000000000 +0100
+@@ -11,26 +11,30 @@
  
- CFLAGS += -Wall
+ DEFINES = -DCONFIG_DIR="\"$(CONFIG_DIR)\"" -DRUNTIME_DIR="\"$(RUNTIME_DIR)\"" -DPID_DIR="\"$(PID_DIR)\""
  
--CC = $(SYS_CC) $(DEFINES)
+-CFLAGS += -Wall
 -
+-CC = $(SYS_CC) $(DEFINES)
++override CFLAGS += -Wall
+ 
  shaperd: $(OBJS)
  
  shaperd.o:	shaperd.c shaperd.h
