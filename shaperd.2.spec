@@ -61,7 +61,7 @@ Skrypt PHP dla shaperd.
 
 %build
 %{__make} \
-	CC=%{__cc} \
+	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags}"
 
 %install
