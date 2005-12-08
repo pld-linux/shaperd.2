@@ -32,10 +32,10 @@ fi
 RETVAL=0
 # See how we were called.
 case "$1" in
-  start) 
+  start)
 	# Check if the service is already running
 	if [ ! -f /var/lock/subsys/shaperd ]; then
-		msg_starting Shaperd 
+		msg_starting Shaperd
 		daemon /usr/sbin/shaperd
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/shaperd
