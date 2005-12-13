@@ -15,9 +15,9 @@ Patch0:		%{name}-fhs.patch
 Patch1:		%{name}-iptables_path.patch
 #URL:		http://sp9wun.republika.pl/linux/shaperd_cbq.html
 URL:		http://www.cbq.trzepak.net/linux/shaperd_cbq.html
-PreReq:		rc-scripts
 Requires(post,preun):	/sbin/chkconfig
 Requires:	firewall-userspace-tool
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_phpdir		%{_datadir}/%{name}
@@ -58,7 +58,7 @@ Skrypt PHP dla shaperd.
 # this file has its own rule in Makefile, without CFLAGS...
 %{__cc} %{rpmcflags} -c shaperd_old.c
 %{__make} \
-	CC=%{__cc} \
+	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags} -Wall"
 
 %install
@@ -129,13 +129,13 @@ fi
 %doc kto-daemon usr/share/docs/shaperd-2.%{version}/shaperd_cbq.html
 %doc usr/share/docs/shaperd-2.%{version}/shaperd_cbq_en.html
 %dir %{_sysconfdir}
-%attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/[iqs]*
+%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/[iqs]*
 %attr(755,root,root) %{_sbindir}/shaperd
 %attr(754,root,root) %{_initrddir}/shaperd
 %dir /var/lib/shaper
 
 %files php
 %defattr(644,root,root,755)
-%attr(640,root,http) %config(noreplace) %verify(not size mtime md5) %{_sysconfdir}/apache-%{name}.conf
+%attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache-%{name}.conf
 %dir %{_phpdir}
 %attr(644,root,root) %{_phpdir}/shaperd.php
