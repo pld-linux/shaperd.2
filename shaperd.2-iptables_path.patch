@@ -1,21 +1,64 @@
-diff -Nur old/etc/shaper/shaper.0.cfg new/etc/shaper/shaper.0.cfg
---- old/etc/shaper/shaper.0.cfg	2004-10-17 10:40:05.000000000 +0000
-+++ new/etc/shaper/shaper.0.cfg	2005-03-20 00:34:58.000000000 +0000
+diff -urN shaper.old/Makefile shaper/Makefile
+--- shaper.old/Makefile	2006-03-29 23:03:09.000000000 +0200
++++ shaper/Makefile	2006-07-10 13:31:06.738801750 +0200
+@@ -5,7 +5,7 @@
+ RUNTIME_DIR=/var/shaper
+ PID_DIR=/var/run
+ DOC_DIR=/usr/share/doc/
+-SBIN_DIR=/sbin
++SBIN_DIR=/usr/sbin
+ SRC_DIR=./src/
+ 
+ MAKE=make
+diff -urN shaper.old/config/shaper.0.cfg shaper/config/shaper.0.cfg
+--- shaper.old/config/shaper.0.cfg	2006-01-31 12:19:55.000000000 +0100
++++ shaper/config/shaper.0.cfg	2006-07-10 13:38:57.228205500 +0200
 @@ -1,5 +1,5 @@
- # ipchains_path=/sbin/ipchains
+-# ipchains_path=/sbin/ipchains
 -# iptables_path=/sbin/iptables
++# ipchains_path=/usr/sbin/ipchains
 +# iptables_path=/usr/sbin/iptables
  # tc_path=/sbin/tc
  
  # timeout of tcp connection on masquerade
-diff -Nur old/shaperd_old.c new/shaperd_old.c
---- old/shaperd_old.c	2004-11-11 11:15:05.000000000 +0000
-+++ new/shaperd_old.c	2005-03-20 00:34:50.000000000 +0000
-@@ -202,7 +202,7 @@
+diff -urN shaper.old/doc/shaperd_cbq.html shaper/doc/shaperd_cbq.html
+--- shaper.old/doc/shaperd_cbq.html	2006-05-15 19:21:30.000000000 +0200
++++ shaper/doc/shaperd_cbq.html	2006-07-10 13:39:07.860870000 +0200
+@@ -451,8 +451,8 @@
+ <li>parametry ³±cz lokalnych w sieci nale¿y wpisaæ do pliku konfiguracyjnego <b>/etc/shaper/shaper.X.cfg</b> - gdzie <b>X</b> to cyfra od 0-7 oznaczaj±ca numer konfiguracji dla kolejnych, pracuj±cych równolegle daemonów shaperd. W przypadku, gdy nie mamy zamiaru uruchamiaæ kilku shaper'ów - wystarczy u¿ywaæ cyfry 0 dla wszystkich plików konfiguracyjnych.<br><br>
+ <b>Przyk³adowy plik konfiguracyjny dla serwera z 1 interfejscem lokalnym eth0 o przepustowo¶ci 10Mbit i ³±czem internetowym ppp0 o maksymalnej przepustowo¶ci 115Kbit (SDI).</b> U¿ywam go dla <b>SDI</b> i normalnej dzier¿awki (po zmianie parametrów dotycz±cych szybko¶ci ;).
+ <pre>
+-ipchains_path=/sbin/ipchains
+-iptables_path=/sbin/iptables
++ipchains_path=/usr/sbin/ipchains
++iptables_path=/usr/sbin/iptables
+ tc_path=/sbin/tc
+ timeout_ipchains_22=3600
+ timeout_ipchains_24=7200
+diff -urN shaper.old/doc/shaperd_cbq_en.html shaper/doc/shaperd_cbq_en.html
+--- shaper.old/doc/shaperd_cbq_en.html	2006-05-15 19:21:30.000000000 +0200
++++ shaper/doc/shaperd_cbq_en.html	2006-07-10 13:39:16.553413250 +0200
+@@ -247,8 +247,8 @@
+ 
+ <b>Example of configuration file for server with: 1 local network interface eth0 with 10Mbit bandwidth and 1 internet interface ppp0 with 115Kbit bandwidth (Erricson's HIS)</b> It does not have larger differences in configuration for other types network links (like DSL or Cable).
+ <pre>
+-ipchains_path=/sbin/ipchains
+-iptables_path=/sbin/iptables
++ipchains_path=/usr/sbin/ipchains
++iptables_path=/usr/sbin/iptables
+ tc_path=/sbin/tc
+ timeout_ipchains_22=3600
+ timeout_ipchains_24=7200
+diff -urN shaper.old/src/shaperd_old.c shaper/src/shaperd_old.c
+--- shaper.old/src/shaperd_old.c	2006-03-29 23:03:12.000000000 +0200
++++ shaper/src/shaperd_old.c	2006-07-10 13:32:27.207830750 +0200
+@@ -231,8 +231,8 @@
+ 	iplista_work[n] = NULL;
      }
  
-     strcpy(ipchains_path,"/sbin/ipchains");
+-    strcpy(ipchains_path,"/sbin/ipchains");
 -    strcpy(iptables_path,"/sbin/iptables");
++    strcpy(ipchains_path,"/usr/sbin/ipchains");
 +    strcpy(iptables_path,"/usr/sbin/iptables");
      strcpy(tc_path,"/sbin/tc");
      

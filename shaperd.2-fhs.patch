@@ -1,7 +1,19 @@
-diff -Nur old/etc/shaper/shaper.0.cfg new/etc/shaper/shaper.0.cfg
---- old/etc/shaper/shaper.0.cfg	2004-10-17 10:40:05.000000000 +0000
-+++ new/etc/shaper/shaper.0.cfg	2005-03-20 00:29:32.000000000 +0000
-@@ -203,7 +203,7 @@
+diff -urN shaper.old/Makefile shaperd/Makefile
+--- shaper.old/Makefile	2006-03-29 23:03:09.000000000 +0200
++++ shaperd/Makefile	2006-07-10 13:22:18.229772000 +0200
+@@ -2,7 +2,7 @@
+ INSTALL_PREFIX=""
+ PACKAGE=shaperd-2.2.41
+ CONFIG_DIR=/etc/shaper
+-RUNTIME_DIR=/var/shaper
++RUNTIME_DIR=/var/lib/shaper
+ PID_DIR=/var/run
+ DOC_DIR=/usr/share/doc/
+ SBIN_DIR=/sbin
+diff -urN shaper.old/config/shaper.0.cfg shaperd/config/shaper.0.cfg
+--- shaper.old/config/shaper.0.cfg	2006-01-31 12:19:55.000000000 +0100
++++ shaperd/config/shaper.0.cfg	2006-07-10 13:23:41.931003000 +0200
+@@ -225,7 +225,7 @@
  # last_rate_perm=600
  last_rate_perm=644
  
@@ -10,23 +22,186 @@ diff -Nur old/etc/shaper/shaper.0.cfg new/etc/shaper/shaper.0.cfg
  # default:
  # write_type=0
  write_type=0
-diff -Nur old/shaperd_old.c new/shaperd_old.c
---- old/shaperd_old.c	2004-11-11 11:15:05.000000000 +0000
-+++ new/shaperd_old.c	2005-03-20 00:26:10.000000000 +0000
-@@ -292,9 +292,9 @@
-     sprintf(pidfile,"/var/run/shaperd.%d.pid",shaperd_counter);
-     sprintf(ignorefile,"/etc/shaper/ignore.%d",shaperd_counter);
-     sprintf(iplistfile,"/etc/shaper/iplist.%d",shaperd_counter);
--    sprintf(oldfile,"/var/shaper/bitrate_user_sh.%d.old",shaperd_counter);
--    sprintf(oldfile_upload,"/var/shaper/bitrate_user_up.%d.old",shaperd_counter);
--    sprintf(lastrate,"/var/shaper/last.%d",shaperd_counter);
-+    sprintf(oldfile,"/var/lib/shaper/bitrate_user_sh.%d.old",shaperd_counter);
-+    sprintf(oldfile_upload,"/var/lib/shaper/bitrate_user_up.%d.old",shaperd_counter);
-+    sprintf(lastrate,"/var/lib/shaper/last.%d",shaperd_counter);
+diff -urN shaper.old/doc/shaperd_cbq.html shaperd/doc/shaperd_cbq.html
+--- shaper.old/doc/shaperd_cbq.html	2006-05-15 19:21:30.000000000 +0200
++++ shaperd/doc/shaperd_cbq.html	2006-07-10 13:28:46.610044250 +0200
+@@ -82,7 +82,7 @@
+ <li>2006/02/09 Poprawki w write_last_rate. Aktualizacja kto.php (1.71) - dodano <b>$total_limit</b> i <b>$show_limit</b></li>
+ <li>2006/01/31 Dodano parametr <a href="#total_limit">total_limit</a></li>
+ <li>2006/01/28 Poprawki w <b>extended_queue</b> (CONFIG_DIR)</li>
+-<li>2006/01/25 Dodano funkcje mkbackup do robienia backupu pliku /var/shaper/last.X. Zmiana typu zmiennych licznikow limitow z unsigned long int na double (<b>czyli nie ma ju¿ ograniczenia wielko¶ci limitów do 4GB!</b>). Dodano parametr <a href="#common_limit">common_limit</a>. Dodano parametry: <a href="#ban_user">max_ban_download</a> i <a href="#ban_user">max_ban_upload</a></li>
++<li>2006/01/25 Dodano funkcje mkbackup do robienia backupu pliku /var/lib/shaper/last.X. Zmiana typu zmiennych licznikow limitow z unsigned long int na double (<b>czyli nie ma ju¿ ograniczenia wielko¶ci limitów do 4GB!</b>). Dodano parametr <a href="#common_limit">common_limit</a>. Dodano parametry: <a href="#ban_user">max_ban_download</a> i <a href="#ban_user">max_ban_upload</a></li>
+ <li>2006/01/24 Dodano komunikat w logu przy banowaniu. Dodano opcje <a href="#ban_user">ban_user</a>. Przy zamykaniu programu usuwamy bany. </li>
+ <li>2006/01/09 Poprawki w get_local_int_numbers. Poprawki w add_user_to_firewall dla squid poniewaz gdy byl na serwerze wiecej niz jeden interfejs lokalny to nastepowalo przesuniecie regulek w tablicy squid po usunieciu i utworzeniu nowej klasy.</li>
+ <li>2006/01/08 Poprawki w del_user_to_firewall - zapomnialem dodac puts i w tablicy shaout tworzyly sie podwojne wpisy poniewaz przy problemach z praca klasy stare wpisy nie byly kasowane.</li>
+@@ -262,7 +262,7 @@
+         <li>Poprawiono kontrolê sk³adni we wpisie <b>inter_int</b> (czy lospeed i hispeed >0)</li>
+         <li>Dodatno ubs³ugê sygna³u <a href="#SIGUSR1"><b>SIGUSR1</b></a></li>
+         <li>Dodatno ubs³ugê sygna³u <a href="#SIGHUP"><b>SIGHUP</b></a></li>
+-        <li>Doda³em parametr <b>write_type</b> do wyboru wygl±du przydzia³ów w <b>/var/shaper/</b>. Nowy wygl±d wymy¶li³ i zaprogramowa³ <b>Marek Ch³opek</b>.</li>
++        <li>Doda³em parametr <b>write_type</b> do wyboru wygl±du przydzia³ów w <b>/var/lib/shaper/</b>. Nowy wygl±d wymy¶li³ i zaprogramowa³ <b>Marek Ch³opek</b>.</li>
+         <li>Poprawilem kontrole wspolczynnikow korekcji szybkosci.</li>
+         <li>Ze wzgledu na sudo dodalem pelna sciezke do komend <b>ipchains, iptables, tc</b></li>
+         <li>Uaktualnilem skrypt startowy</li>
+@@ -288,7 +288,7 @@
+ 	na pozostalych userow. Cecha przydatna raczej w sieciach komercyjnych.</li>
+ <li><b>05.04.2003</b> - Doda³em kilka wpisów do sekcji <a href="#faq">FAQ</a>.</li>
+ <li><b>05.04.2003</b> - Wersja 2.00beta59.<ul>
+-	<li>Je¶li <b>write_delay=0</b> - shaperd nie bêdzie zapisywa³ przydzia³ów na dysku (w katalogu <b>/var/shaper/</b>)</li>
++	<li>Je¶li <b>write_delay=0</b> - shaperd nie bêdzie zapisywa³ przydzia³ów na dysku (w katalogu <b>/var/lib/shaper/</b>)</li>
+ 	<li>Shaperd nie wywala ju¿ ¿adnych informacji do logu gdy uruchamiany jest z parametrami: <b>shownat</b> lub <b>shownat_all</b></li>
+ 	</ul>
+ </li>
+@@ -576,9 +576,9 @@
+ <li><b>default_upload_limit</b> - <b>0</b> - wy³±cza indywidualne limity ilo¶ci wys³anych danych. Wiêcej informacji w przyk³adzie <a href=#limit>Limity</a>.</li>
+ <li><b>default_download_hispeed</b> - <b>0</b> - oznacza ¿e po przekroczeniu limitu ¶ci±gania maksymalna mo¿liwa prêdko¶æ w kierunku ¶ci±gania bêdzie ograniczona do po³owy. Wiêcej informacji w przyk³adzie <a href=#limit>Limity</a>.</li>
+ <li><b>default_upload_hispeed</b> - <b>0</b> - oznacza ¿e po przekroczeniu limitu wysy³ania maksymalna mo¿liwa prêdko¶æ w kierunku wysy³ania bêdzie ograniczona do po³owy. Wiêcej informacji w przyk³adzie <a href=#limit>Limity</a>.</li>
+-<li><b>write_last_rate</b> - co ile cykli shapera ma byæ tworzony plik <b>/var/shaper/last.X</b> zawieraj±cy aktualnie wykorzystane limity. <b>0</b> - wy³±cza uaktualnianie tego pliku (plik i tak jest tworzony przy ka¿dym restarcie shapera - by zapamiêtaæ "osi±gniêcia" u¿ytkowników nawet pomimo skasowania liczników regu³ek na firewallu.</li>
+-<li><b>last_rate_perm</b> - prawa dostêpu do pliku <b>/var/shaper/last.X</b> (wpisane ósemkowo).</li>
+-<li><b>write_type</b> - <b>0</b> - klasyczny format zapisu plików w katalogu <b>/var/shaper/bitrate_user_*</b>, <b>1</b> - alternatywny format zapisu (niekompatybilny z kto.php) ale ³atwy do wy¶wietlania na konsoli w formie tabelek - autorem zmian jest <b>Marek Ch³opek</b>.</li>
++<li><b>write_last_rate</b> - co ile cykli shapera ma byæ tworzony plik <b>/var/lib/shaper/last.X</b> zawieraj±cy aktualnie wykorzystane limity. <b>0</b> - wy³±cza uaktualnianie tego pliku (plik i tak jest tworzony przy ka¿dym restarcie shapera - by zapamiêtaæ "osi±gniêcia" u¿ytkowników nawet pomimo skasowania liczników regu³ek na firewallu.</li>
++<li><b>last_rate_perm</b> - prawa dostêpu do pliku <b>/var/lib/shaper/last.X</b> (wpisane ósemkowo).</li>
++<li><b>write_type</b> - <b>0</b> - klasyczny format zapisu plików w katalogu <b>/var/lib/shaper/bitrate_user_*</b>, <b>1</b> - alternatywny format zapisu (niekompatybilny z kto.php) ale ³atwy do wy¶wietlania na konsoli w formie tabelek - autorem zmian jest <b>Marek Ch³opek</b>.</li>
+ <li><b>inter_int</b> - parametry <b>zewnêtrznych</b> interfejsów (internetowych)<ul>
+ 	<li><b>ppp0</b> - nazwa interfejsu internetowego.</li>
+ 	<li><b>8000</b> - <b>lospeed</b> - minimalna gwarantowana szybko¶æ pobierania.</li>
+@@ -860,42 +860,42 @@
+ killall -USR1 shaperd
+ </pre></li>
+ <a name="SIGUSR2"></a>
+-<li>Sygna³ <b>SIGUSR2</b> s³u¿y do wymuszenia na shaperze odczytania pliku <b>/var/shaper/diff.X</b> zawieraj±cego poprawki do stanu liczników ilo¶ci przes³anych przez uzytkowników danych oraz wy³±czeniu ograniczeñ za³±czonych po przekroczeniu limitów. Po otrzymaniu sygna³u shaper podejmie odpowiednie dzia³ania po zakoñczeniu aktualnego cyklu (wiêc czas reakcji zalezy od czasu trwania cyklu - domy¶lnie 10 sekund). Przyk³ad u¿ycia:
++<li>Sygna³ <b>SIGUSR2</b> s³u¿y do wymuszenia na shaperze odczytania pliku <b>/var/lib/shaper/diff.X</b> zawieraj±cego poprawki do stanu liczników ilo¶ci przes³anych przez uzytkowników danych oraz wy³±czeniu ograniczeñ za³±czonych po przekroczeniu limitów. Po otrzymaniu sygna³u shaper podejmie odpowiednie dzia³ania po zakoñczeniu aktualnego cyklu (wiêc czas reakcji zalezy od czasu trwania cyklu - domy¶lnie 10 sekund). Przyk³ad u¿ycia:
+ <pre>
+ killall -USR2 shaperd
+ </pre>
+-Format pliku <b>/var/shaper/diff.X</b> jest identyczny jak format pliku ze stanem liczników <b>/var/shaper/last.X</b>
+-Po otrzymaniu sygna³u <b>SIGUSR2</b> shaperd odczytuje zawarto¶æ tego pliku i dla ka¿dego numeru IP który bêdzie w tym pliku wprowadza poprawki odejmuj±c od odpowiednich liczników w pliku <b>/var/shaper/last.X</b> warto¶ci znajduj±ce siê na tych samych pozycjach w pliku <b>/var/shaper/diff.X</b>
++Format pliku <b>/var/lib/shaper/diff.X</b> jest identyczny jak format pliku ze stanem liczników <b>/var/lib/shaper/last.X</b>
++Po otrzymaniu sygna³u <b>SIGUSR2</b> shaperd odczytuje zawarto¶æ tego pliku i dla ka¿dego numeru IP który bêdzie w tym pliku wprowadza poprawki odejmuj±c od odpowiednich liczników w pliku <b>/var/lib/shaper/last.X</b> warto¶ci znajduj±ce siê na tych samych pozycjach w pliku <b>/var/lib/shaper/diff.X</b>
+ Przyk³ad - wyzerowanie liczników pojedyñczego u¿ytkownika:
+-Przyk³adowa zawarto¶æ pliku <b>/var/shaper/last.0</b> (fragment):
++Przyk³adowa zawarto¶æ pliku <b>/var/lib/shaper/last.0</b> (fragment):
+ <pre>
+ 192.168.1.17/32 0 0 19619239 376089797 2449730 38422314
+ 192.168.1.18/32 0 0 522872 50936564 513868 6156332
+ 192.168.1.10/32 0 0 4306649848 68952545 3879551339 14294842
+ 192.168.1.13/32 0 0 0 0 0 0
+ </pre>
+-Chcemy wyzerowaæ wszystkie liczniki u¿ytkownika o IP 192.168.1.10 - tworzymy plik <b>/var/shaper/diff.0</b> o zawarto¶ci
++Chcemy wyzerowaæ wszystkie liczniki u¿ytkownika o IP 192.168.1.10 - tworzymy plik <b>/var/lib/shaper/diff.0</b> o zawarto¶ci
+ <pre>
+ 192.168.1.10/32 0 0 4306649848 68952545 3879551339 14294842
+ </pre>
+-Liczniki siê wyzeruj± po otrzymaniu sygna³u <b>SIGUSR2</b> poniewa¿ od aktualnej warto¶ci odpowiedniego licznika zostanie odjêta odpowiednia liczba z pliku <b>/var/shaper/diff.0</b>
+-Nic nie stoi na przeszkodzie równie¿ zwiêkszyæ komu¶ stan licznika - wystarczy wpisaæ w pliku <b>/var/shaper/diff.0</b> warto¶ci ujemne:
++Liczniki siê wyzeruj± po otrzymaniu sygna³u <b>SIGUSR2</b> poniewa¿ od aktualnej warto¶ci odpowiedniego licznika zostanie odjêta odpowiednia liczba z pliku <b>/var/lib/shaper/diff.0</b>
++Nic nie stoi na przeszkodzie równie¿ zwiêkszyæ komu¶ stan licznika - wystarczy wpisaæ w pliku <b>/var/lib/shaper/diff.0</b> warto¶ci ujemne:
+ <pre>
+ 192.168.1.10/32 0 0 -1000000 0 0 0
+ </pre>
+ Wyj±tkiem jest tutaj ustawianie/kasowanie dwóch pierwszych cyfr po numerze IP (s± to znaczniki przekroczenia limitu ilo¶ci ¶ci±gniêtych danych i ilo¶ci wys³anych danych) - znaczniki te kasuje siê wpisuj±c warto¶æ dla nich <b>0</b> a ustawia siê wpisuj±c warto¶æ <b>1</b>. Przyk³ad:
+-plik <b>/var/shaper/last.0</b> (fragment):
++plik <b>/var/lib/shaper/last.0</b> (fragment):
+ <pre>
+ 192.168.1.17/32 0 0 19619239 376089797 2449730 38422314
+ 192.168.1.18/32 0 0 522872 50936564 513868 6156332
+ 192.168.1.10/32 1 1 4306649848 68952545 3879551339 14294842
+ </pre>
+-Aby skasowaæ znaczniki przekroczenia limitu wystarczy wpisaæ w pliku <b>/var/shaper/diff.0</b> warto¶ci:
++Aby skasowaæ znaczniki przekroczenia limitu wystarczy wpisaæ w pliku <b>/var/lib/shaper/diff.0</b> warto¶ci:
+ <pre>
+ 192.168.1.10/32 0 0 0 0 0 0
+ </pre>
+ Zwracam uwagê, ¿e zostan± skasowane tylko znaczniki a liczniki nie - wiêc je¶li u¿ytkownik nadal w konfiguracji ma wpisane te same limity ilo¶ci przes³anychdanych to ponownie za moment bêdzie mia³ te znaczniki ustawione (nale¿y wiêc pamiêtaæ przy zerowaniu znaczników przekroczenia limitów albo o zmniejszeniu liczników albo o zwiêkszeniu w pliku konfiguracyjnym limitów dla tego u¿ytkownika (i prze³adowaniu konfiguracji!))<br>
+-Plik <b>/var/shaper/diff.0</b> po przetworzeniu przez shapera jest usuwany wiêc za ka¿dym razem trzeba tworzyæ nowy.
++Plik <b>/var/lib/shaper/diff.0</b> po przetworzeniu przez shapera jest usuwany wiêc za ka¿dym razem trzeba tworzyæ nowy.
+ </li><br><br>
+ <a name="SIGHUP"></a>
+ <li>Sygna³ <b>SIGHUP</b> s³u¿y do wymuszenia na shaperze prze³adowania konfiguracji (reload). W szczególno¶ci s³u¿y do wprowadzania zmian wide³ek poszczególnym u¿ytkownikom w trakcie pracy shapera bez konieczno¶ci ca³kowitego restartowania. Nale¿y zwróciæ uwagê, ¿e nie ka¿da zmiana jest mo¿liwa do uaktualnienia.<br>
+@@ -1124,7 +1124,7 @@
+ </pre>
+ </li></ul>
  
-     // czytamy liste interfejsow w systemie
-     if (debug>2) printf("debug 3: reading list of system interfaces\n");
-@@ -776,8 +776,8 @@
+-<li>Daemon musi dzia³aæ na prawach <b>root</b> i mieæ mo¿liwo¶æ zapisu do katalogu <b>/var/shaper</b>. Katalog taki trzeba za³o¿yæ z w³a¶cicielem <b>root</b> i prawami <b>755</b><br><br></li>
++<li>Daemon musi dzia³aæ na prawach <b>root</b> i mieæ mo¿liwo¶æ zapisu do katalogu <b>/var/lib/shaper</b>. Katalog taki trzeba za³o¿yæ z w³a¶cicielem <b>root</b> i prawami <b>755</b><br><br></li>
+ <li>W <b>/etc/shaper/ignore.X</b> sa wpisane wyj±tki dla których <b>shaper</b> nie rezerwuje ³±cza (Dotyczy tylko w przypadku gdy opcja <b>nomasq=no</b>).
+ Mog± to byæ przyk³adowo:<br>
+ 217.96.55.5 411 - numer ip i port 411<br>
+@@ -1134,7 +1134,7 @@
+ Aktualn± listê branych pod uwagê przy podziale numerów ip i portów na maskaradzie (czyli po wyeliminowaniu po³±czeñ z pliku <b>/etc/shaper/ignore.X</b>) mo¿na podgl±dn±æ pisz±c:
+ <pre>/sbin/shaperd shownat</pre>
+ W dostarczonym przyk³adowym pliku s± zrobione wpisy dla popularnych komunikatorów np. GaduGady, Tlen oraz dla kilku czatów i MUD'ów.</li><br><br>
+-<li>W katalogu <b>/var/shaper</b> generowane s± pliki:<ul>
++<li>W katalogu <b>/var/lib/shaper</b> generowane s± pliki:<ul>
+ <li><b>bitrate_user_sh.X.old</b> - zawiera numery ip oraz przydzielone wide³ki dla download.</li>
+ <li><b>bitrate_user_up.X.old</b> - zawiera numery ip oraz przydzielone wide³ki dla upload.</li>
+ Mo¿na to wykorzystaæ do wizualizacji na stronie www - <a href="http://www.trzepak.net/modules.php?op=modload&name=Aktywne Komputery&file=index">przyk³ad u¿ycia</a>. Zawarto¶æ tych plików mo¿e wygl±daæ mniej-wiêcej tak:
+@@ -1259,7 +1259,7 @@
+ <P>Aby ustrzec siê pewnych problemów, które mog± wynikn±æ w trakcie normalnej eksploatacji daemona nale¿y przestrzegaæ kilku zasad (zasady te bêd± ulegaæ zmianom w trakcie wprowadzania zmian w kolejnych wersjach programu - na razie jednak mysz±byæ poniewa¿ nie jestem wszechwiedz±cy i nie z ka¿dym problemem potrafiê sobie poradziæ)</p>
+ <ol>
+ <li>Je¶li <b>shaperd</b> wiesza siê lub nie chce siê uruchomiæ - zacznij od skompilowania na swoim systemie kodów ¼ród³owych. Plik wykonywalny dostarczany w archiwum jest skompilowany na do¶æ ¶wie¿ym systemie i mog± byæ problemy z uruchomieniem na bardziej wiekowych dystrybucjach.</li><br><br>
+-<li>Je¶li <b>shaperd</b> dzia³a³ a po np "zwisie" systemu przy starcie sie zawiesza to przed jego uruchomieniem usuñ plik: <b>/var/shaper/last.X</b> - gdzie <b>X</b> to numer konfiguracji shapera (zwykle jest to <b>0</b>). Problem jest spowodowany tym, ¿e shaper nie ma zrobionej kontroli sk³adni zawarto¶ci tego pliku. Jakiekolwiek uszkodzenie zawarto¶ci tego pliku shapera nam po³o¿y kompletnie. W przysz³o¶ci nad tym popracujê a na razie jest jak jest. Lepiej ¿eby siê nic nie wiesza³o :)</li><br><br>
++<li>Je¶li <b>shaperd</b> dzia³a³ a po np "zwisie" systemu przy starcie sie zawiesza to przed jego uruchomieniem usuñ plik: <b>/var/lib/shaper/last.X</b> - gdzie <b>X</b> to numer konfiguracji shapera (zwykle jest to <b>0</b>). Problem jest spowodowany tym, ¿e shaper nie ma zrobionej kontroli sk³adni zawarto¶ci tego pliku. Jakiekolwiek uszkodzenie zawarto¶ci tego pliku shapera nam po³o¿y kompletnie. W przysz³o¶ci nad tym popracujê a na razie jest jak jest. Lepiej ¿eby siê nic nie wiesza³o :)</li><br><br>
+ <li>Przy starcie systemu skrypt startowy <b>/etc/init.d/shaperd</b> uruchamiaj mo¿liwie na koñcu a w szczególno¶ci zawsze uruchamiaj go po jakichkolwiek skryptach, które mog± modyfikowaæ <b>firewall</b> (np. wszelkie skrypty do konfiguracji maskarady, firewalla itp.).</li><br><br>
+ <li>Je¶li wykonywa³e¶ jakiekolwiek operacjie na firewallu (wyczy¶ci³e¶ liczniki regu³ek, dopisa³e¶ lub skasowa³e¶ jakie¶ regu³ki, prze³adowa³e¶ firewall itp.) obowi±zkowo zrestartuj <b>shaperd</b>. Zaniechanie tego mo¿e skutkowaæ zd³awieniem ca³ego transferu przychodz±cego, poniewa¿ <b>shaperd</b> przy starcie tworzy w³asne regu³ki na firewall'u i musz± byæ one sprawdzane w pierwszej kolejno¶ci. Zmiana kolejno¶ci regu³ na firewallu mo¿e (choæ nie musi) skutkowaæ tym, ¿e regu³y rejestruj±ce ruch przychodz±cy dla shaper'a niczego nie bêd± rejestrowaæ i daemon stwierdzi, ¿e nikt nie wykorzystuje przydzielonych wide³ek wiêc zacznie obni¿aæ przydzia³y (a¿ do minimum gwarantowanego). Aby sprawdziæ czy regu³y dla shapera znajduj± siê na w³a¶ciwym miejscu i pracuj± prawid³owo wystarczy zrobiæ nastêpuj±c± operacjê:<ul>
+ <li>dla ipchains:<ul>
+diff -urN shaper.old/doc/shaperd_cbq_en.html shaperd/doc/shaperd_cbq_en.html
+--- shaper.old/doc/shaperd_cbq_en.html	2006-05-15 19:21:30.000000000 +0200
++++ shaperd/doc/shaperd_cbq_en.html	2006-07-10 13:28:29.344965250 +0200
+@@ -103,7 +103,7 @@
+ highest CIR (lospeed - minimum guaraneed speed) to lowest CIR. This change I made esspecially for commercial networks.</li>
+ 
+ <li><b>05.04.2003</b> - Version 2.00beta59.<ul>
+-	<li>If <b>write_delay=0</b> - shaperd will not write bandwidth allocations on disk (in <b>/var/shaper/</b> directory)</li>
++	<li>If <b>write_delay=0</b> - shaperd will not write bandwidth allocations on disk (in <b>/var/lib/shaper/</b> directory)</li>
+ 	<li>Shaperd will not write any messages to log when started with <b>shownat</b> or <b>shownat_all</b></li>
+ 	</ul>
+ </li>
+@@ -575,7 +575,7 @@
+ modprobe sch_sfq
+ modprobe cls_u32
+ </li></ul><br>
+-<li>Daemon has to act <b>root</b> on rights and to have possibility of record to directory <b>/var/shaper</b>. It has owner of this directory to be <b>root</b>. Attributes of this directory are <b>755</b><br></li><br>
++<li>Daemon has to act <b>root</b> on rights and to have possibility of record to directory <b>/var/lib/shaper</b>. It has owner of this directory to be <b>root</b>. Attributes of this directory are <b>755</b><br></li><br>
+ <li>In file <b>/etc/shaper</b> are written except for which <b>shaperd</b> does not assign bandwidth. Example:<br>
+ 217.96.55.5 411 - IP number and port 411<br>
+ 213.180.130.190 - IP number nad all ports<br>
+@@ -584,7 +584,7 @@
+ You should know that every IP number must end with space character.<br>
+ Current list taken under attention at division of numbers ip it were been possible to see writing:
+ <pre>/sbin/shaperd shownat</pre></li>
+-<li>In directory /var/shaper is gernerated bitrate_user_sh.X.old file - it contains IP numbers as well as assigned bandwidths. It was been possible to use it to visualization on WWW page - <a href="http://www.trzepak.net/modules.php?op=modload&name=Aktywne Komputery&file=index">example of use</a>. Content of this file can look so:
++<li>In directory /var/lib/shaper is gernerated bitrate_user_sh.X.old file - it contains IP numbers as well as assigned bandwidths. It was been possible to use it to visualization on WWW page - <a href="http://www.trzepak.net/modules.php?op=modload&name=Aktywne Komputery&file=index">example of use</a>. Content of this file can look so:
+ <pre>
+ 192.168.1.2 40000
+ 192.168.1.9 58000
+diff -urN shaper.old/scripts/kto.php shaperd/scripts/kto.php
+--- shaper.old/scripts/kto.php	2006-02-11 14:38:52.000000000 +0100
++++ shaperd/scripts/kto.php	2006-07-10 13:23:18.989569250 +0200
+@@ -161,7 +161,7 @@
+     $mail_name='trzepak.net';
+ 
+     // plik z wykorzystaniem limitow
+-    $limit_path='/var/shaper/last.'.$shaperd_counter;
++    $limit_path='/var/lib/shaper/last.'.$shaperd_counter;
+     
+     
+ // koniec zmiennych edytowanych
+@@ -314,8 +314,8 @@
+ 	}
+     }
+ 
+-    $shaper_filename='/var/shaper/bitrate_user_sh.'.$shaperd_counter.'.old';
+-    $shaout_filename='/var/shaper/bitrate_user_up.'.$shaperd_counter.'.old';
++    $shaper_filename='/var/lib/shaper/bitrate_user_sh.'.$shaperd_counter.'.old';
++    $shaout_filename='/var/lib/shaper/bitrate_user_up.'.$shaperd_counter.'.old';
+     if (! $alttlen) $tlen="<a href=\"http://www.tlen.pl/pobierz.html\">Tlen</a>";
+ 
+ // Inicjalizacja generatora liczb losowych
+diff -urN shaper.old/src/shaperd_old.c shaperd/src/shaperd_old.c
+--- shaper.old/src/shaperd_old.c	2006-03-29 23:03:12.000000000 +0200
++++ shaperd/src/shaperd_old.c	2006-07-10 13:22:59.960380000 +0200
+@@ -827,8 +827,8 @@
  
      if (! olddelay)
      {
@@ -37,7 +212,7 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
      }
  
      if (!quick_start)
-@@ -2432,11 +2432,11 @@
+@@ -2856,11 +2856,11 @@
  */
  		}
  	    }
@@ -51,117 +226,3 @@ diff -Nur old/shaperd_old.c new/shaperd_old.c
  		write_bitrate_user_last_upload(bitrate_user_last_upload,oldfile_upload,int_cnt);
  	    }
  	    old = 0;
-diff -Nur old/usr/share/docs/shaperd-2.2.24/shaperd_cbq_en.html new/usr/share/docs/shaperd-2.2.24/shaperd_cbq_en.html
---- old/usr/share/docs/shaperd-2.2.24/shaperd_cbq_en.html	2004-11-11 11:30:13.000000000 +0000
-+++ new/usr/share/docs/shaperd-2.2.24/shaperd_cbq_en.html	2005-03-20 00:26:42.000000000 +0000
-@@ -101,7 +101,7 @@
- highest CIR (lospeed - minimum guaraneed speed) to lowest CIR. This change I made esspecially for commercial networks.</li>
- 
- <li><b>05.04.2003</b> - Version 2.00beta59.<ul>
--	<li>If <b>write_delay=0</b> - shaperd will not write bandwidth allocations on disk (in <b>/var/shaper/</b> directory)</li>
-+	<li>If <b>write_delay=0</b> - shaperd will not write bandwidth allocations on disk (in <b>/var/lib/shaper/</b> directory)</li>
- 	<li>Shaperd will not write any messages to log when started with <b>shownat</b> or <b>shownat_all</b></li>
- 	</ul>
- </li>
-@@ -573,7 +573,7 @@
- modprobe sch_sfq
- modprobe cls_u32
- </li></ul><br>
--<li>Daemon has to act <b>root</b> on rights and to have possibility of record to directory <b>/var/shaper</b>. It has owner of this directory to be <b>root</b>. Attributes of this directory are <b>755</b><br></li><br>
-+<li>Daemon has to act <b>root</b> on rights and to have possibility of record to directory <b>/var/lib/shaper</b>. It has owner of this directory to be <b>root</b>. Attributes of this directory are <b>755</b><br></li><br>
- <li>In file <b>/etc/shaper</b> are written except for which <b>shaperd</b> does not assign bandwidth. Example:<br>
- 217.96.55.5 411 - IP number and port 411<br>
- 213.180.130.190 - IP number nad all ports<br>
-@@ -582,7 +582,7 @@
- You should know that every IP number must end with space character.<br>
- Current list taken under attention at division of numbers ip it were been possible to see writing:
- <pre>/sbin/shaperd shownat</pre></li>
--<li>In directory /var/shaper is gernerated bitrate_user_sh.X.old file - it contains IP numbers as well as assigned bandwidths. It was been possible to use it to visualization on WWW page - <a href="http://www.trzepak.net/kto.php">example of use</a>. Content of this file can look so:
-+<li>In directory /var/lib/shaper is gernerated bitrate_user_sh.X.old file - it contains IP numbers as well as assigned bandwidths. It was been possible to use it to visualization on WWW page - <a href="http://www.trzepak.net/kto.php">example of use</a>. Content of this file can look so:
- <pre>
- 192.168.1.2 40000
- 192.168.1.9 58000
-diff -Nur old/usr/share/docs/shaperd-2.2.24/shaperd_cbq.html new/usr/share/docs/shaperd-2.2.24/shaperd_cbq.html
---- old/usr/share/docs/shaperd-2.2.24/shaperd_cbq.html	2004-11-11 11:30:08.000000000 +0000
-+++ new/usr/share/docs/shaperd-2.2.24/shaperd_cbq.html	2005-03-20 00:26:42.000000000 +0000
-@@ -105,7 +105,7 @@
-         <li>Poprawiono kontrolê sk³adni we wpisie <b>inter_int</b> (czy lospeed i hispeed >0)</li>
-         <li>Dodatno ubs³ugê sygna³u <a href="#SIGUSR1"><b>SIGUSR1</b></a></li>
-         <li>Dodatno ubs³ugê sygna³u <a href="#SIGHUP"><b>SIGHUP</b></a></li>
--        <li>Doda³em parametr <b>write_type</b> do wyboru wygl±du przydzia³ów w <b>/var/shaper/</b>. Nowy wygl±d wymy¶li³ i zaprogramowa³ <b>Marek Ch³opek</b>.</li>
-+        <li>Doda³em parametr <b>write_type</b> do wyboru wygl±du przydzia³ów w <b>/var/lib/shaper/</b>. Nowy wygl±d wymy¶li³ i zaprogramowa³ <b>Marek Ch³opek</b>.</li>
-         <li>Poprawilem kontrole wspolczynnikow korekcji szybkosci.</li>
-         <li>Ze wzgledu na sudo dodalem pelna sciezke do komend <b>ipchains, iptables, tc</b></li>
-         <li>Uaktualnilem skrypt startowy</li>
-@@ -131,7 +131,7 @@
- 	na pozostalych userow. Cecha przydatna raczej w sieciach komercyjnych.</li>
- <li><b>05.04.2003</b> - Doda³em kilka wpisów do sekcji <a href="#faq">FAQ</a>.</li>
- <li><b>05.04.2003</b> - Wersja 2.00beta59.<ul>
--	<li>Je¶li <b>write_delay=0</b> - shaperd nie bêdzie zapisywa³ przydzia³ów na dysku (w katalogu <b>/var/shaper/</b>)</li>
-+	<li>Je¶li <b>write_delay=0</b> - shaperd nie bêdzie zapisywa³ przydzia³ów na dysku (w katalogu <b>/var/lib/shaper/</b>)</li>
- 	<li>Shaperd nie wywala ju¿ ¿adnych informacji do logu gdy uruchamiany jest z parametrami: <b>shownat</b> lub <b>shownat_all</b></li>
- 	</ul>
- </li>
-@@ -419,9 +419,9 @@
- <li><b>default_upload_limit</b> - <b>0</b> - wy³±cza indywidualne limity ilo¶ci wys³anych danych. Wiêcej informacji w przyk³adzie <a href=#limit>Limity</a>.</li>
- <li><b>default_download_hispeed</b> - <b>0</b> - oznacza ¿e po przekroczeniu limitu ¶ci±gania maksymalna mo¿liwa prêdko¶æ w kierunku ¶ci±gania bêdzie ograniczona do po³owy. Wiêcej informacji w przyk³adzie <a href=#limit>Limity</a>.</li>
- <li><b>default_upload_hispeed</b> - <b>0</b> - oznacza ¿e po przekroczeniu limitu wysy³ania maksymalna mo¿liwa prêdko¶æ w kierunku wysy³ania bêdzie ograniczona do po³owy. Wiêcej informacji w przyk³adzie <a href=#limit>Limity</a>.</li>
--<li><b>write_last_rate</b> - co ile cykli shapera ma byæ tworzony plik <b>/var/shaper/last.X</b> zawieraj±cy aktualnie wykorzystane limity. <b>0</b> - wy³±cza uaktualnianie tego pliku (plik i tak jest tworzony przy ka¿dym restarcie shapera - by zapamiêtaæ "osi±gniêcia" u¿ytkowników nawet pomimo skasowania liczników regu³ek na firewallu.</li>
--<li><b>last_rate_perm</b> - prawa dostêpu do pliku <b>/var/shaper/last.X</b> (wpisane ósemkowo).</li>
--<li><b>write_type</b> - <b>0</b> - klasyczny format zapisu plików w katalogu <b>/var/shaper/bitrate_user_*</b>, <b>1</b> - alternatywny format zapisu (niekompatybilny z kto.php) ale ³atwy do wy¶wietlania na konsoli w formie tabelek - autorem zmian jest <b>Marek Ch³opek</b>.</li>
-+<li><b>write_last_rate</b> - co ile cykli shapera ma byæ tworzony plik <b>/var/lib/shaper/last.X</b> zawieraj±cy aktualnie wykorzystane limity. <b>0</b> - wy³±cza uaktualnianie tego pliku (plik i tak jest tworzony przy ka¿dym restarcie shapera - by zapamiêtaæ "osi±gniêcia" u¿ytkowników nawet pomimo skasowania liczników regu³ek na firewallu.</li>
-+<li><b>last_rate_perm</b> - prawa dostêpu do pliku <b>/var/lib/shaper/last.X</b> (wpisane ósemkowo).</li>
-+<li><b>write_type</b> - <b>0</b> - klasyczny format zapisu plików w katalogu <b>/var/lib/shaper/bitrate_user_*</b>, <b>1</b> - alternatywny format zapisu (niekompatybilny z kto.php) ale ³atwy do wy¶wietlania na konsoli w formie tabelek - autorem zmian jest <b>Marek Ch³opek</b>.</li>
- <li><b>inter_int</b> - parametry <b>zewnêtrznych</b> interfejsów (internetowych)<ul>
- 	<li><b>ppp0</b> - nazwa interfejsu internetowego.</li>
- 	<li><b>8000</b> - <b>lospeed</b> - minimalna gwarantowana szybko¶æ pobierania.</li>
-@@ -854,7 +854,7 @@
- </pre>
- </li></ul>
- 
--<li>Daemon musi dzia³aæ na prawach <b>root</b> i mieæ mo¿liwo¶æ zapisu do katalogu <b>/var/shaper</b>. Katalog taki trzeba za³o¿yæ z w³a¶cicielem <b>root</b> i prawami <b>755</b><br><br></li>
-+<li>Daemon musi dzia³aæ na prawach <b>root</b> i mieæ mo¿liwo¶æ zapisu do katalogu <b>/var/lib/shaper</b>. Katalog taki trzeba za³o¿yæ z w³a¶cicielem <b>root</b> i prawami <b>755</b><br><br></li>
- <li>W <b>/etc/shaper/ignore.X</b> sa wpisane wyj±tki dla których <b>shaper</b> nie rezerwuje ³±cza (Dotyczy tylko w przypadku gdy opcja <b>nomasq=no</b>).
- Mog± to byæ przyk³adowo:<br>
- 217.96.55.5 411 - numer ip i port 411<br>
-@@ -864,7 +864,7 @@
- Aktualn± listê branych pod uwagê przy podziale numerów ip i portów na maskaradzie (czyli po wyeliminowaniu po³±czeñ z pliku <b>/etc/shaper/ignore.X</b>) mo¿na podgl±dn±æ pisz±c:
- <pre>/sbin/shaperd shownat</pre>
- W dostarczonym przyk³adowym pliku s± zrobione wpisy dla popularnych komunikatorów np. GaduGady, Tlen oraz dla kilku czatów i MUD'ów.</li><br><br>
--<li>W katalogu <b>/var/shaper</b> generowane s± pliki:<ul>
-+<li>W katalogu <b>/var/lib/shaper</b> generowane s± pliki:<ul>
- <li><b>bitrate_user_sh.X.old</b> - zawiera numery ip oraz przydzielone wide³ki dla download.</li>
- <li><b>bitrate_user_up.X.old</b> - zawiera numery ip oraz przydzielone wide³ki dla upload.</li>
- Mo¿na to wykorzystaæ do wizualizacji na stronie www - <a href="http://www.trzepak.net/kto.php">przyk³ad u¿ycia</a>. Zawarto¶æ tych plików mo¿e wygl±daæ mniej-wiêcej tak:
-@@ -987,7 +987,7 @@
- <P>Aby ustrzec siê pewnych problemów, które mog± wynikn±æ w trakcie normalnej eksploatacji daemona nale¿y przestrzegaæ kilku zasad (zasady te bêd± ulegaæ zmianom w trakcie wprowadzania zmian w kolejnych wersjach programu - na razie jednak mysz±byæ poniewa¿ nie jestem wszechwiedz±cy i nie z ka¿dym problemem potrafiê sobie poradziæ)</p>
- <ol>
- <li>Je¶li <b>shaperd</b> wiesza siê lub nie chce siê uruchomiæ - zacznij od skompilowania na swoim systemie kodów ¼ród³owych. Plik wykonywalny dostarczany w archiwum jest skompilowany na do¶æ ¶wie¿ym systemie i mog± byæ problemy z uruchomieniem na bardziej wiekowych dystrybucjach.</li><br><br>
--<li>Je¶li <b>shaperd</b> dzia³a³ a po np "zwisie" systemu przy starcie sie zawiesza to przed jego uruchomieniem usuñ plik: <b>/var/shaper/last.X</b> - gdzie <b>X</b> to numer konfiguracji shapera (zwykle jest to <b>0</b>). Problem jest spowodowany tym, ¿e shaper nie ma zrobionej kontroli sk³adni zawarto¶ci tego pliku. Jakiekolwiek uszkodzenie zawarto¶ci tego pliku shapera nam po³o¿y kompletnie. W przysz³o¶ci nad tym popracujê a na razie jest jak jest. Lepiej ¿eby siê nic nie wiesza³o :)</li><br><br>
-+<li>Je¶li <b>shaperd</b> dzia³a³ a po np "zwisie" systemu przy starcie sie zawiesza to przed jego uruchomieniem usuñ plik: <b>/var/lib/shaper/last.X</b> - gdzie <b>X</b> to numer konfiguracji shapera (zwykle jest to <b>0</b>). Problem jest spowodowany tym, ¿e shaper nie ma zrobionej kontroli sk³adni zawarto¶ci tego pliku. Jakiekolwiek uszkodzenie zawarto¶ci tego pliku shapera nam po³o¿y kompletnie. W przysz³o¶ci nad tym popracujê a na razie jest jak jest. Lepiej ¿eby siê nic nie wiesza³o :)</li><br><br>
- <li>Przy starcie systemu skrypt startowy <b>/etc/init.d/shaperd</b> uruchamiaj mo¿liwie na koñcu a w szczególno¶ci zawsze uruchamiaj go po jakichkolwiek skryptach, które mog± modyfikowaæ <b>firewall</b> (np. wszelkie skrypty do konfiguracji maskarady, firewalla itp.).</li><br><br>
- <li>Je¶li wykonywa³e¶ jakiekolwiek operacjie na firewallu (wyczy¶ci³e¶ liczniki regu³ek, dopisa³e¶ lub skasowa³e¶ jakie¶ regu³ki, prze³adowa³e¶ firewall itp.) obowi±zkowo zrestartuj <b>shaperd</b>. Zaniechanie tego mo¿e skutkowaæ zd³awieniem ca³ego transferu przychodz±cego, poniewa¿ <b>shaperd</b> przy starcie tworzy w³asne regu³ki na firewall'u i musz± byæ one sprawdzane w pierwszej kolejno¶ci. Zmiana kolejno¶ci regu³ na firewallu mo¿e (choæ nie musi) skutkowaæ tym, ¿e regu³y rejestruj±ce ruch przychodz±cy dla shaper'a niczego nie bêd± rejestrowaæ i daemon stwierdzi, ¿e nikt nie wykorzystuje przydzielonych wide³ek wiêc zacznie obni¿aæ przydzia³y (a¿ do minimum gwarantowanego). Aby sprawdziæ czy regu³y dla shapera znajduj± siê na w³a¶ciwym miejscu i pracuj± prawid³owo wystarczy zrobiæ nastêpuj±c± operacjê:<ul>
- <li>dla ipchains:<ul>
-diff -Nur old/var/www/html/kto.php new/var/www/html/kto.php
---- old/var/www/html/kto.php	2004-07-19 20:58:01.000000000 +0000
-+++ new/var/www/html/kto.php	2005-03-20 00:26:49.000000000 +0000
-@@ -147,7 +147,7 @@
-     $mail_name='trzepak.net';
- 
-     // plik z wykorzystaniem limitow
--    $limit_path='/var/shaper/last.'.$shaperd_counter;
-+    $limit_path='/var/lib/shaper/last.'.$shaperd_counter;
-     
- // koniec zmiennych edytowanych
- // end of edited section
-@@ -251,8 +251,8 @@
- 	}
-     }
- 
--    $shaper_filename='/var/shaper/bitrate_user_sh.'.$shaperd_counter.'.old';
--    $shaout_filename='/var/shaper/bitrate_user_up.'.$shaperd_counter.'.old';
-+    $shaper_filename='/var/lib/shaper/bitrate_user_sh.'.$shaperd_counter.'.old';
-+    $shaout_filename='/var/lib/shaper/bitrate_user_up.'.$shaperd_counter.'.old';
-     if (! $alttlen) $tlen="<a href=\"http://www.tlen.pl/pobierz.html\">Tlen</a>";
- 
- // Inicjalizacja generatora liczb losowych
