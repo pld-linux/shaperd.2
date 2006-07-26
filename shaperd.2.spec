@@ -56,7 +56,7 @@ Skrypt PHP dla shaperd.
 
 %build
 %{__make} clean
-%{__make} 
+%{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -123,4 +123,4 @@ fi
 %attr(640,root,http) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apache-%{name}.conf
 %dir %{_phpdir}
 %attr(755,root,root) %{_sbindir}/kto-daemon
-%attr(644,root,root) %{_phpdir}/shaperd.php
+%{_phpdir}/shaperd.php
