@@ -1,8 +1,10 @@
+# TODO
+# - webapps framework
 Summary:	Shaperd - bandwidth limiting
 Summary(pl):	Shaperd - dzielenie ³±cza
 Name:		shaperd.2
 Version:	2.42
-Release:	0.1
+Release:	1
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
@@ -40,8 +42,8 @@ Summary:	PHP script for shaperd
 Summary(pl):	Skrypt PHP dla shaperd
 Group:		Networking/Admin
 Requires:	%{name} = %{version}-%{release}
-Requires:	php
 Requires:	webserver
+Requires:	webserver(php)
 
 %description php
 PHP script for shaperd.
