@@ -1,7 +1,7 @@
 # TODO
 # - webapps framework
 Summary:	Shaperd - bandwidth limiting
-Summary(pl):	Shaperd - dzielenie ³±cza
+Summary(pl.UTF-8):   Shaperd - dzielenie Å‚Ä…cza
 Name:		shaperd.2
 Version:	2.43
 Release:	1
@@ -33,13 +33,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 This program limits bandwidth on the ethernet/ppp interface and
 divides it between the hosts in the local network.
 
-%description -l pl
-Program potrafi ograniczaæ przepustowo¶æ interfejsu ethernet/ppp oraz
-dzieliæ dostêpne pasmo pomiêdzy komputery w sieci lokalnej.
+%description -l pl.UTF-8
+Program potrafi ograniczaÄ‡ przepustowoÅ›Ä‡ interfejsu ethernet/ppp oraz
+dzieliÄ‡ dostÄ™pne pasmo pomiÄ™dzy komputery w sieci lokalnej.
 
 %package php
 Summary:	PHP script for shaperd
-Summary(pl):	Skrypt PHP dla shaperd
+Summary(pl.UTF-8):   Skrypt PHP dla shaperd
 Group:		Networking/Admin
 Requires:	%{name} = %{version}-%{release}
 Requires:	webserver
@@ -48,7 +48,7 @@ Requires:	webserver(php)
 %description php
 PHP script for shaperd.
 
-%description php -l pl
+%description php -l pl.UTF-8
 Skrypt PHP dla shaperd.
 
 %prep
