@@ -1,7 +1,7 @@
 # TODO
 # - webapps framework
 Summary:	Shaperd - bandwidth limiting
-Summary(pl.UTF-8):   Shaperd - dzielenie łącza
+Summary(pl.UTF-8):	Shaperd - dzielenie łącza
 Name:		shaperd.2
 Version:	2.43
 Release:	1
@@ -39,7 +39,7 @@ dzielić dostępne pasmo pomiędzy komputery w sieci lokalnej.
 
 %package php
 Summary:	PHP script for shaperd
-Summary(pl.UTF-8):   Skrypt PHP dla shaperd
+Summary(pl.UTF-8):	Skrypt PHP dla shaperd
 Group:		Networking/Admin
 Requires:	%{name} = %{version}-%{release}
 Requires:	webserver
