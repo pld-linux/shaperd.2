@@ -3,14 +3,14 @@
 Summary:	Shaperd - bandwidth limiting
 Summary(pl.UTF-8):	Shaperd - dzielenie łącza
 Name:		shaperd.2
-Version:	2.43
+Version:	2.47
 Release:	1
 License:	GPL
 Group:		Networking/Admin
 #Source0:	http://sp9wun.republika.pl/prg/%{name}.%{version}.tar.gz
 # Changed source to decrease traffic at republika.pl
 Source0:	http://www.cbq.trzepak.net/prg/%{name}.%{version}.tar.gz
-# Source0-md5:	6fdfc0c6e63ed82505a3708b1d1d30a6
+# Source0-md5:	d501a4a8238fd993f0d863747886cca4
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Patch0:		%{name}-fhs.patch
